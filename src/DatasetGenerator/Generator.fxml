@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.image.*?>
+<?import com.jfoenix.controls.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.collections.*?>
+
+<BorderPane prefHeight="455.0" prefWidth="582.0" styleClass="theme" stylesheets="@../Style/Style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="DatasetGenerator.GeneratorController">
+   <center>
+      <AnchorPane prefHeight="459.0" prefWidth="598.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label layoutX="10.0" layoutY="11.0" stylesheets="@../Style/Style.css" text="1. Operation Presence">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="10.0" layoutY="40.0" stylesheets="@../Style/Style.css" text="2. TA Activities VDC Level">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="10.0" layoutY="69.0" stylesheets="@../Style/Style.css" text="3. TA Activities Ward Level">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="10.0" layoutY="98.0" stylesheets="@../Style/Style.css" text="4. District Profile">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="10.0" layoutY="135.0" stylesheets="@../Style/Style.css" text="Enter your choice">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <ComboBox fx:id="optionCombo" layoutX="166.0" layoutY="137.0" onAction="#optionComboAction" prefHeight="27.0" prefWidth="65.0" />
+            <Label layoutX="243.0" layoutY="139.0" text="Example: 3 forTA Activities VDC level" />
+            <TextArea fx:id="logText" layoutX="5.0" layoutY="170.0" prefHeight="280.0" prefWidth="572.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="170.0" />
+         </children>
+      </AnchorPane>
+   </center>
+</BorderPane>
