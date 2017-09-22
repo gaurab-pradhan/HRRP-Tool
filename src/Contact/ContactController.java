@@ -47,7 +47,7 @@ import org.json.simple.parser.ParseException;
 public class ContactController extends BorderPane {
 
     @FXML
-    private TableColumn<Contact, String> emailCol, nameCol, orgCol, desigCol, phoneCol, agencyCol, snCol;
+    private TableColumn<Contact, String> emailCol, nameCol, orgCol, desigCol, phoneCol, agencyCol, snCol, mailingListCol;
 
     @FXML
     TableView<Contact> tableView;
@@ -153,21 +153,21 @@ public class ContactController extends BorderPane {
                             + "        \"PHONE\": \"" + phoneTxt + "\",\n"
                             + "        \"AGENCY\": \"" + agency_type + "\"\n"
                             + "    },\n"
-                            + "    \"interests\": {\""+Constants.national+"\":true," //National
-                            + "    \""+Constants.dhading+"\":" + dha.isSelected() + "," // Dhading
-                            + "    \""+Constants.dolakha+"\":" + dol.isSelected() + "," // Dolakha
-                            + "    \""+Constants.gorkha+"\":" + gor.isSelected() + "," // Gorkha
-                            + "    \""+Constants.kavre+"\":" + kav.isSelected() + "," // Kavre
-                            + "    \""+Constants.makwanpur+"\":" + mak.isSelected() + "," // Makwanpur
-                            + "    \""+Constants.nuwakot+"\":" + nuw.isSelected() + "," // Nuwakot
-                            + "    \""+Constants.okhaldhunga+"\":" + okh.isSelected() + "," // Okhaldhunga
-                            + "    \""+Constants.ramechhap+"\":" + ram.isSelected() + "," // Ramechhap
-                            + "    \""+Constants.rasuwa+"\":" + ras.isSelected() + "," // Rasuwa
-                            + "    \""+Constants.sindhuli+"\":" + sin.isSelected() + "," // Sindhuli
-                            + "    \""+Constants.sindhupalchok+"\":" + sp.isSelected() + "," // Sindhupalchok
-                            + "    \""+Constants.bhaktapur+"\":" + bk.isSelected() + "," // Bhaktapur
-                            + "    \""+Constants.lalitpur+"\":" + lp.isSelected() + "," // lalitpur
-                            + "    \""+Constants.kathmandu+"\":" + ktm.isSelected() + "}\n" // Ktm
+                            + "    \"interests\": {\"" + Constants.national + "\":true," //National
+                            + "    \"" + Constants.dhading + "\":" + dha.isSelected() + "," // Dhading
+                            + "    \"" + Constants.dolakha + "\":" + dol.isSelected() + "," // Dolakha
+                            + "    \"" + Constants.gorkha + "\":" + gor.isSelected() + "," // Gorkha
+                            + "    \"" + Constants.kavre + "\":" + kav.isSelected() + "," // Kavre
+                            + "    \"" + Constants.makwanpur + "\":" + mak.isSelected() + "," // Makwanpur
+                            + "    \"" + Constants.nuwakot + "\":" + nuw.isSelected() + "," // Nuwakot
+                            + "    \"" + Constants.okhaldhunga + "\":" + okh.isSelected() + "," // Okhaldhunga
+                            + "    \"" + Constants.ramechhap + "\":" + ram.isSelected() + "," // Ramechhap
+                            + "    \"" + Constants.rasuwa + "\":" + ras.isSelected() + "," // Rasuwa
+                            + "    \"" + Constants.sindhuli + "\":" + sin.isSelected() + "," // Sindhuli
+                            + "    \"" + Constants.sindhupalchok + "\":" + sp.isSelected() + "," // Sindhupalchok
+                            + "    \"" + Constants.bhaktapur + "\":" + bk.isSelected() + "," // Bhaktapur
+                            + "    \"" + Constants.lalitpur + "\":" + lp.isSelected() + "," // lalitpur
+                            + "    \"" + Constants.kathmandu + "\":" + ktm.isSelected() + "}\n" // Ktm
                             + "}";
 //                    System.out.println(input);
                     OutputStream os = httpConnection.getOutputStream();
@@ -366,7 +366,7 @@ public class ContactController extends BorderPane {
                             boolean sindhuli = ((boolean) nestJsonObject.get(Constants.sindhuli));
                             boolean sindhupalchok = ((boolean) nestJsonObject.get(Constants.sindhupalchok));
                             boolean kath = ((boolean) nestJsonObject.get(Constants.kathmandu));
-                            boolean bkt= ((boolean) nestJsonObject.get(Constants.bhaktapur));
+                            boolean bkt = ((boolean) nestJsonObject.get(Constants.bhaktapur));
                             boolean lalit = ((boolean) nestJsonObject.get(Constants.lalitpur));
                             dha.setSelected(dhading);
                             dol.setSelected(dolakha);
@@ -466,7 +466,7 @@ public class ContactController extends BorderPane {
     }
 
     private void fillCombo() {
-        String[] orgType = {"NRA Central", "NRA District", "MoFALD CLPIU & DLPIU", "MoUD CLPIU","MoUD DLPIU Engineers","District Government","Other Government Agencies","Donor","Partner Organizations","Private Sectors","Journalist/Media","Others"};
+        String[] orgType = {"NRA Central", "NRA District", "MoFALD CLPIU & DLPIU", "MoUD CLPIU", "MoUD DLPIU Engineers", "District Government", "Other Government Agencies", "Donor", "Partner Organizations", "Private Sectors", "Journalist/Media", "Others"};
         ObservableList obList = FXCollections.observableArrayList();
         for (int i = 0; i < orgType.length; i++) {
             obList.add(orgType[i]);
@@ -483,6 +483,7 @@ public class ContactController extends BorderPane {
         desigCol.setCellValueFactory(new PropertyValueFactory<>("position"));
         phoneCol.setCellValueFactory(new PropertyValueFactory<>("phone"));
         agencyCol.setCellValueFactory(new PropertyValueFactory<>("agency_type"));
+        mailingListCol.setCellValueFactory(new PropertyValueFactory<>("mailing_list"));
         snCol.setCellValueFactory(column -> new ReadOnlyObjectWrapper(tableView.getItems().indexOf(column.getValue()) + 1));
     }
 
@@ -559,12 +560,12 @@ public class ContactController extends BorderPane {
             File file = new File(path + "/" + fname);
             FileWriter fw = new FileWriter(file.getAbsoluteFile());
             bw = new BufferedWriter(fw);
-            bw.write("SN.,Name,Designation,Organisation,Agency Type,Contact Number,Email ID");
+            bw.write("SN.,Name,Designation,Organisation,Agency Type,Contact Number,Email ID,MailingList");
             bw.write("\n");
             for (int i = 0; i < mainList.size(); i++) {
                 String content = i + 1 + "," + "\"" + mainList.get(i).getName() + "\"" + "," + "\"" + mainList.get(i).getPosition() + "\"" + ","
                         + "\"" + mainList.get(i).getOrg() + "\"" + "," + "\"" + mainList.get(i).getAgency_type() + "\"" + ","
-                        + "\"" + mainList.get(i).getPhone() + "\"" + "," + mainList.get(i).getEmail();
+                        + "\"" + mainList.get(i).getPhone() + "\"" + "," + mainList.get(i).getEmail() + "," + "\"" + mainList.get(i).getMailing_list() + "\"";
                 bw.write(content);
                 bw.write("\n");
             }

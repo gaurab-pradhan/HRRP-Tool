@@ -89,6 +89,7 @@
                                         <TableColumn fx:id="desigCol" prefWidth="75.0" text="DESIGNATION" />
                                         <TableColumn fx:id="phoneCol" prefWidth="75.0" text="CONTACT NUMBER" />
                                         <TableColumn fx:id="agencyCol" prefWidth="75.0" text="AGENCY TYPE" visible="false" />
+                              <TableColumn fx:id="mailingListCol" prefWidth="75.0" text="MailingList" visible="false" />
                                     </columns>
                                     <columnResizePolicy>
                                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
