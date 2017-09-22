@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+<?import com.jfoenix.controls.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="576.0" prefWidth="772.0" styleClass="theme" stylesheets="@../Style/Style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Home.HomeController">
+   <bottom>
+      <HBox prefHeight="19.0" prefWidth="600.0" styleClass="footer" BorderPane.alignment="CENTER">
+         <children>
+            <Label prefHeight="19.0" prefWidth="321.0" styleClass="footerLbl" text="© 2017 HRRP Nepal. All Rights Reserved | Design by HRRP Nepal IM">
+               <padding>
+                  <Insets bottom="1.0" left="6.0" />
+               </padding>
+            </Label>
+            <StackPane alignment="CENTER_RIGHT" prefHeight="19.0" prefWidth="322.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <Label prefHeight="19.0" prefWidth="38.0" styleClass="footerLbl" text="V. 2.0">
+                     <padding>
+                        <Insets bottom="1.0" left="6.0" />
+                     </padding>
+                  </Label>
+               </children>
+            </StackPane>
+         </children>
+      </HBox>
+   </bottom>
+   <left>
+      <JFXDrawer fx:id="drawer" defaultDrawerSize="200.0" BorderPane.alignment="CENTER" />
+   </left>
+   <top>
+      <Pane prefHeight="61.0" prefWidth="707.0" styleClass="header" BorderPane.alignment="CENTER">
+         <children>
+            <JFXHamburger fx:id="hamburger" layoutX="6.0" layoutY="4.0" prefHeight="49.0" prefWidth="35.0" styleClass="jfx-hamburger-icon">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </JFXHamburger>
+            <ImageView layoutX="32.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Images/logo-hrrp.png" />
+               </image>
+            </ImageView>
+         </children>
+      </Pane>
+   </top>
+</BorderPane>
