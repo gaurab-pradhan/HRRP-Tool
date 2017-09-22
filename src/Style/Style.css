@@ -1,0 +1,26 @@
+.theme {
+    -fx-background-color: #FFFFFF;
+	-fx-font-family: "SansSerif";
+	-fx-background-radius: 25;
+}
+.header, .footer {
+    -fx-background-color: #0E5BA3;
+}
+.footerLbl {
+	-fx-text-fill: #FFFFFF;
+	-fx-font-size: 10px;
+}
+.jfx-hamburger-icon StackPane{
+    -fx-background-color : #FFFFFF;
+	-fx-background-radius : 5px;
+}
+.Btn{
+	-fx-text-fill:White;
+	-fx-background-color:#0E5BA3;
+	-fx-font-weight: bold;
+}
+.Btn1{
+	-fx-text-fill:White;
+	-fx-background-color:#C62828;
+	-fx-font-weight: bold;
+}
