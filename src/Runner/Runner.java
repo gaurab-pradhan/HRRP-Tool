@@ -11,7 +11,7 @@ import Util.*;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.sql.Connection;
+import java.sql.*;
 import java.util.HashMap;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -91,6 +91,34 @@ public class Runner extends Application {
             loc.setApp(this, stage);
         } else {
             try {
+                new Thread(new Runnable() {
+                    public void run() {
+                        try {
+                            Connection con = DBUtil.getConnectionSQLite();
+                            Statement stmt = con.createStatement();
+                            ResultSet rs = null;
+                            rs = stmt.executeQuery("SELECT count(*) FROM tbl_st_target");
+                            int count = 0;
+                            if (rs.next()) {
+                                count = rs.getInt(1);
+                            }
+                            if (count == 0) {
+                                stmt.executeUpdate("DELETE from tbl_vt_target");
+                                STVT_Target stvt = new STVT_Target();
+                                stvt.st_vt(district);
+                            }
+                            rs.close();
+                            stmt.close();
+                            con.close();
+                        } catch (Exception ex) {
+                            StringWriter sw = new StringWriter();
+                            PrintWriter pw = new PrintWriter(sw);
+                            ex.printStackTrace(pw);
+                            String exceptionText = sw.toString();
+                            log.error(exceptionText);
+                        }
+                    }
+                }).start();
                 HomeController home = (HomeController) replaceSceneContent(Constants.HOME);
                 home.setApp(this, stage, district);
             } catch (Exception ex) {
