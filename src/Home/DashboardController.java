@@ -128,7 +128,7 @@ public class DashboardController extends BorderPane implements Initializable {
 //            Date date = null;
 
             stmt = conmysql.createStatement();
-            String select = "Select * from " + tableName + " where district = " + district; // select data from MYSQL database
+            String select = "Select * from " + tableName + " where district =  '" + district + "'"; // select data from MYSQL database
             if (district.toLowerCase().equals("kathmandu valley")) {
                 select = "Select * from " + tableName + " where district = 'Kathmandu' or district = 'Lalitpur' or district = 'Bhaktapur'";
             }
