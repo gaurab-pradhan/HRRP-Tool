@@ -2,8 +2,7 @@ package Util;
 
 import java.io.*;
 import java.sql.*;
-import java.util.logging.Level;
-import org.apache.log4j.Logger;
+import org.apache.log4j.*;
 
 /**
  *
@@ -50,7 +49,7 @@ public class DBUtil {
         con = getConnectionSQLite();
         createLocTbl();
         createHRRP_4wTbl();
-        createUsertbl();
+//        createUsertbl();
     }
 
     private static void createLocTbl() {
@@ -304,8 +303,8 @@ public class DBUtil {
             stmt = con.createStatement();
             stmt.executeUpdate(sql);
             stmt.executeUpdate("INSERT INTO `user` (`id`, `uname`, `password`, `type`) VALUES\n"
-                    + "(1, 'user', 'pass', 'Super Admin'),\n"
-                    + "(2, 'user1', 'pass', 'National');");
+                    + "(1, 'im.national@hrrpnepal.org', 'HRNepalRP20!7', 'Super Admin'),\n"
+                    + "(2, 'national@hrrpnepal.org', 'HRNepalRP20!7', 'National');");
         } catch (SQLException ex) {
             StringWriter sw = new StringWriter();
             PrintWriter pw = new PrintWriter(sw);
@@ -314,12 +313,6 @@ public class DBUtil {
             log.error(exceptionText);
         } finally {
             if (stmt != null) {
-                try {
-                    stmt.close();
-                } catch (SQLException ex) {
-                }
-            }
-            if (con != null) {
                 try {
                     stmt.close();
                 } catch (SQLException ex) {
