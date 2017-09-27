@@ -32,7 +32,7 @@
                   <Font name="System Bold" size="20.0" />
                </font>
             </Label>
-            <Label layoutX="10.0" layoutY="98.0" stylesheets="@../Style/Style.css" text="4. District Profile">
+            <Label fx:id="dpLbl" layoutX="10.0" layoutY="98.0" stylesheets="@../Style/Style.css" text="4. District Profile">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
@@ -43,7 +43,7 @@
                </font>
             </Label>
             <ComboBox fx:id="optionCombo" layoutX="166.0" layoutY="137.0" onAction="#optionComboAction" prefHeight="27.0" prefWidth="65.0" />
-            <Label layoutX="243.0" layoutY="139.0" text="Example: 3 forTA Activities VDC level" />
+            <Label layoutX="243.0" layoutY="139.0" text="Example: 2 forTA Activities VDC level" />
             <TextArea fx:id="logText" layoutX="5.0" layoutY="170.0" prefHeight="280.0" prefWidth="572.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="170.0" />
          </children>
       </AnchorPane>
