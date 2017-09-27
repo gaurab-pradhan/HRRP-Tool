@@ -15,6 +15,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
 
@@ -36,6 +37,9 @@ public class GeneratorController implements Initializable {
 
     @FXML
     Label dpLbl;
+    
+    @FXML
+    TextArea logText;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
