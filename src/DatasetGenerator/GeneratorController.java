@@ -14,6 +14,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
 
@@ -33,10 +34,18 @@ public class GeneratorController implements Initializable {
     @FXML
     private ComboBox<String> optionCombo;
 
+    @FXML
+    Label dpLbl;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         stage = Home.HomeController.stage;
         district = HomeController.dis;
+        if (district.toLowerCase().equals("national")) {
+            dpLbl.setVisible(true);
+        } else {
+            dpLbl.setVisible(false);
+        }
         fillCombo();
     }
 
@@ -46,27 +55,48 @@ public class GeneratorController implements Initializable {
         if (!optionCombo.getSelectionModel().isEmpty()) {
             String temp = optionCombo.getSelectionModel().getSelectedItem();
             choice = Integer.parseInt(temp);
-            switch (choice) {
-                case 1:
-                    System.out.println("Processing : Operational Presence " + tablename);
-                    OperationalPresence.main();
-                    break;
-                case 2:
-                    System.out.println("Processing : Standard Product(VDC Level Data) " + tablename);
-                    StandardProduct.standardVDC();
-                    break;
-                case 3:
-                    System.out.println("Processing : Standard Product(Ward Level Data) " + tablename);
-                    StandardProduct.standardWard();
-                    break;
+            if (district.toLowerCase().equals("national")) {
+                switch (choice) {
+                    case 1:
+                        System.out.println("Processing : Operational Presence " + tablename);
+                        OperationalPresence.main();
+                        break;
+                    case 2:
+                        System.out.println("Processing : Standard Product(VDC Level Data) " + tablename);
+                        StandardProduct.standardVDC();
+                        break;
+                    case 3:
+                        System.out.println("Processing : Standard Product(Ward Level Data) " + tablename);
+                        StandardProduct.standardWard();
+                        break;
 
-                case 4:
-                    System.out.println("Processing : District Profile " + tablename);
-                    DistrictProfile.main();
-                    break;
-                default:
-                    System.out.println("You did not enter a valid choice.");
-                    break;
+                    case 4:
+                        System.out.println("Processing : District Profile " + tablename);
+                        DistrictProfile.main();
+                        break;
+                    default:
+                        System.out.println("You did not enter a valid choice.");
+                        break;
+                }
+            } else {
+                switch (choice) {
+                    case 1:
+                        System.out.println("Processing : Operational Presence " + tablename);
+                        OperationalPresence.main();
+                        break;
+                    case 2:
+                        System.out.println("Processing : Standard Product(VDC Level Data) " + tablename);
+                        StandardProduct.standardVDC();
+                        break;
+                    case 3:
+                        System.out.println("Processing : Standard Product(Ward Level Data) " + tablename);
+                        StandardProduct.standardWard();
+                        break;
+
+                    default:
+                        System.out.println("You did not enter a valid choice.");
+                        break;
+                }
             }
         }
 
@@ -75,9 +105,16 @@ public class GeneratorController implements Initializable {
     private void fillCombo() {
         String[] orgType = {"1", "2", "3", "4"};
         ObservableList obList = FXCollections.observableArrayList();
-        for (int i = 0; i < orgType.length; i++) {
-            obList.add(orgType[i]);
+        if (district.toLowerCase().equals("national")) {
+            for (int i = 0; i < orgType.length; i++) {
+                obList.add(orgType[i]);
+            }
+        } else {
+            for (int i = 0; i < orgType.length - 1; i++) {
+                obList.add(orgType[i]);
+            }
         }
+
         optionCombo.setItems(obList);
     }
 }
