@@ -39,6 +39,7 @@ public class OperationalPresence {
                 String query = "SELECT district ,HRRP_VDC_CODE,vdc, COUNT(distinct(po)) count_po FROM " + tableName + " where act_type != 'Other' GROUP by district,HRRP_VDC_CODE,vdc ORDER BY district ASC";
                 String fname = "_OperationalPresence.csv";
                 String header = "District,HRRP_VDC_CODE,VDC, PO_COUNT";
+                System.out.println(query);
                 WriteCSV.writeToCSV(con, path, query, header, fname,logText);
                 con.close();
             } else {
