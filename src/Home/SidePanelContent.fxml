@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.*?>
+<?import java.lang.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox prefHeight="485.0" prefWidth="200.0" style="-fx-background-color: #0E5BA3;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Home.SidePanelContentController">
+   <children>
+      <ImageView fitHeight="127.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Images/back.png" />
+         </image>
+      </ImageView>
+      <JFXButton fx:id="b1" buttonType="RAISED" onAction="#changeScreen" prefHeight="74.0" prefWidth="199.0" ripplerFill="#fc0000" style="-fx-background-color: #f1f1f1;" text="HOME" />
+      <JFXButton fx:id="b31" buttonType="RAISED" onAction="#changeScreen" prefHeight="74.0" prefWidth="199.0" ripplerFill="#fc0000" style="-fx-background-color: #f1f1f1;" text="INSERT CLEAN 4W" />
+      <JFXButton fx:id="b3" buttonType="RAISED" layoutX="10.0" layoutY="197.0" onAction="#changeScreen" prefHeight="74.0" prefWidth="199.0" ripplerFill="#fc0000" style="-fx-background-color: #f1f1f1;" text="4W CHECK" />
+      <JFXButton fx:id="b2" buttonType="RAISED" layoutX="10.0" layoutY="123.0" onAction="#changeScreen" prefHeight="74.0" prefWidth="199.0" ripplerFill="#fc0000" style="-fx-background-color: #f1f1f1;" text="CONTACT" />
+      <JFXButton fx:id="b4" buttonType="RAISED" layoutX="10.0" layoutY="123.0" onAction="#changeScreen" prefHeight="74.0" prefWidth="199.0" ripplerFill="#fc0000" style="-fx-background-color: #f1f1f1;" text="DATASET GENERATOR" />
+      <JFXButton fx:id="exit" buttonType="RAISED" layoutX="10.0" layoutY="271.0" onAction="#exit" prefHeight="74.0" prefWidth="199.0" ripplerFill="#fc0000" style="-fx-background-color: #f1f1f1;" text="EXIT" />
+   </children>
+</VBox>
