@@ -16,6 +16,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Iterator;
+import javafx.scene.control.TextArea;
 import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
@@ -32,18 +33,20 @@ public class DistrictProfile {
     static String output = PropertiesUtil.getOutput() + "\\DP";
     static String tableName = "tbl_hrrp_4w";
     private static Logger log = Logger.getLogger(DistrictProfile.class.getName());
+    static TextArea logText;
 
-    public static void main() {
+    public static void main(TextArea logT) {
+        logText = logT;
         Statement stmt = null;
 
         File file = new File(output);
         String path = null;
         if (!file.exists()) {
             if (file.mkdirs()) {
-                System.out.println("Directory is created!");
+                logText.appendText("Directory is created!\n");
                 path = file.getAbsolutePath();
             } else {
-                System.out.println("Failed to create directory!");
+                logText.appendText("Failed to create directory!\n");
             }
         } else {
             path = file.getAbsolutePath();
@@ -75,7 +78,7 @@ public class DistrictProfile {
                 InputStream file = new FileInputStream(template);
                 Workbook workbook = WorkbookFactory.create(file);
 //                int rowIndex = 1;
-                System.out.println("Generating dataset for DP");
+                logText.appendText("Generating dataset for DP\n");
                 String query = null;
                 query = "select district,po,group_concat(distinct impl_partner separator ',') AS ip "
                         + "from " + tableName + "\n"
@@ -99,14 +102,14 @@ public class DistrictProfile {
                 String fname = "DP-Data-" + todayDate;
                 FileOutputStream fos = new FileOutputStream(outputPath + "/" + fname + ".xlsx");
                 workbook.write(fos);
-                System.out.println(outputPath + "/" + fname + ".xlsx created");
+                logText.appendText(outputPath + "/" + fname + ".xlsx created");
                 fos.close();
                 workbook.close();
             } else {
-                System.out.println("Unable to find template for DP");
+                logText.appendText("Unable to find template for DP\n");
             }
         } else {
-            System.out.println("DB connection is Null");
+            logText.appendText("DB connection is Null\n");
         }
     }
 

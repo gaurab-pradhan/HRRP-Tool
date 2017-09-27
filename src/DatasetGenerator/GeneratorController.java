@@ -37,7 +37,7 @@ public class GeneratorController implements Initializable {
 
     @FXML
     Label dpLbl;
-    
+
     @FXML
     TextArea logText;
 
@@ -51,6 +51,7 @@ public class GeneratorController implements Initializable {
             dpLbl.setVisible(false);
         }
         fillCombo();
+        logText.setText("");
     }
 
     @FXML
@@ -62,21 +63,21 @@ public class GeneratorController implements Initializable {
             if (district.toLowerCase().equals("national")) {
                 switch (choice) {
                     case 1:
-                        System.out.println("Processing : Operational Presence " + tablename);
-                        OperationalPresence.main();
+                        logText.appendText("Processing : Operational Presence " + tablename + "\n");
+                        OperationalPresence.main(logText);
                         break;
                     case 2:
-                        System.out.println("Processing : Standard Product(VDC Level Data) " + tablename);
-                        StandardProduct.standardVDC();
+                        logText.appendText("Processing : Standard Product(VDC Level Data) " + tablename + "\n");
+                        StandardProduct.standardVDC(logText);
                         break;
                     case 3:
-                        System.out.println("Processing : Standard Product(Ward Level Data) " + tablename);
-                        StandardProduct.standardWard();
+                        logText.appendText("Processing : Standard Product(Ward Level Data) " + tablename + "\n");
+                        StandardProduct.standardWard(logText);
                         break;
 
                     case 4:
-                        System.out.println("Processing : District Profile " + tablename);
-                        DistrictProfile.main();
+                        logText.appendText("Processing : District Profile " + tablename + "\n");
+                        DistrictProfile.main(logText);
                         break;
                     default:
                         System.out.println("You did not enter a valid choice.");
@@ -85,16 +86,16 @@ public class GeneratorController implements Initializable {
             } else {
                 switch (choice) {
                     case 1:
-                        System.out.println("Processing : Operational Presence " + tablename);
-                        OperationalPresence.main();
+                        logText.appendText("Processing : Operational Presence " + tablename + "\n");
+                        OperationalPresence.main(logText);
                         break;
                     case 2:
-                        System.out.println("Processing : Standard Product(VDC Level Data) " + tablename);
-                        StandardProduct.standardVDC();
+                        logText.appendText("Processing : Standard Product(VDC Level Data) " + tablename + "\n");
+                        StandardProduct.standardVDC(logText);
                         break;
                     case 3:
-                        System.out.println("Processing : Standard Product(Ward Level Data) " + tablename);
-                        StandardProduct.standardWard();
+                        logText.appendText("Processing : Standard Product(Ward Level Data) " + tablename + "\n");
+                        StandardProduct.standardWard(logText);
                         break;
 
                     default:

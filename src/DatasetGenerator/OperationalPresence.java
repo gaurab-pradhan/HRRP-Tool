@@ -4,6 +4,7 @@ import Util.DBUtil;
 import Util.PropertiesUtil;
 import java.io.*;
 import java.sql.*;
+import javafx.scene.control.TextArea;
 import org.apache.log4j.Logger;
 
 /**
@@ -17,16 +18,16 @@ public class OperationalPresence {
     static String tableName = "tbl_hrrp_4w";
     private static Logger log = Logger.getLogger(OperationalPresence.class.getName());
 
-    public static void main() {
+    public static void main(TextArea logText) {
 
         File file = new File(output);
         String path = null;
         if (!file.exists()) {
             if (file.mkdirs()) {
-                System.out.println("Directory is created!");
+                logText.appendText("Directory is created!\n");
                 path = file.getAbsolutePath();
             } else {
-                System.out.println("Failed to create directory!");
+                logText.appendText("Failed to create directory!\n");
             }
         } else {
             path = file.getAbsolutePath();
@@ -38,7 +39,7 @@ public class OperationalPresence {
                 String query = "SELECT district ,HRRP_VDC_CODE,vdc, COUNT(distinct(po)) count_po FROM " + tableName + " where act_type != 'Other' GROUP by district,HRRP_VDC_CODE,vdc ORDER BY district ASC";
                 String fname = "_OperationalPresence.csv";
                 String header = "District,HRRP_VDC_CODE,VDC, PO_COUNT";
-                WriteCSV.writeToCSV(con, path, query, header, fname);
+                WriteCSV.writeToCSV(con, path, query, header, fname,logText);
                 con.close();
             } else {
                 System.out.println("Unable to create directory!");

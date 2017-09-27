@@ -16,6 +16,7 @@ import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import javafx.scene.control.TextArea;
 import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -39,16 +40,16 @@ public class StandardProduct {
 //        standardWard();
     }
 
-    public static void standardWard() {
+    public static void standardWard(TextArea logText) {
         template = PropertiesUtil.getTemplate_ta_ward();
         File file = new File(output + "\\ward");
         String path = null;
         if (!file.exists()) {
             if (file.mkdirs()) {
-                System.out.println("Directory is created!");
+                logText.appendText("Directory is created!\n");
                 path = file.getAbsolutePath();
             } else {
-                System.out.println("Failed to create directory!");
+                logText.appendText("Failed to create directory!\n");
             }
         } else {
             path = file.getAbsolutePath();
@@ -162,16 +163,16 @@ public class StandardProduct {
         }
     }
 
-    public static void standardVDC() {
+    public static void standardVDC(TextArea logText) {
         template = PropertiesUtil.getTemplate_ta_vdc();
         File file = new File(output + "\\vdc");
         String path = null;
         if (!file.exists()) {
             if (file.mkdirs()) {
-                System.out.println("Directory is created!");
+                logText.appendText("Directory is created!\n");
                 path = file.getAbsolutePath();
             } else {
-                System.out.println("Failed to create directory!");
+                logText.appendText("Failed to create directory!\n");
             }
         } else {
             path = file.getAbsolutePath();

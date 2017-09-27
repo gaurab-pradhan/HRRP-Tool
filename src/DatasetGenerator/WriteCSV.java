@@ -5,6 +5,7 @@ import java.sql.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import javafx.scene.control.TextArea;
 import org.apache.log4j.Logger;
 
 /**
@@ -15,7 +16,7 @@ public class WriteCSV {
 
     private static Logger log = Logger.getLogger(WriteCSV.class.getName());
 
-    static void writeToCSV(Connection con, String path, String query, String header, String filename) throws SQLException {
+    static void writeToCSV(Connection con, String path, String query, String header, String filename, TextArea logText) throws SQLException {
         Statement stmt = null;
         ResultSet rs = null;
         DateFormat dateFormat = new SimpleDateFormat("yyMMdd");
@@ -45,7 +46,7 @@ public class WriteCSV {
                 bw.write("\n");
             }
             bw.close();
-            System.out.println(path + "/" + fname + " created");
+            logText.appendText(path + "/" + fname + " created\n");
         } catch (IOException ex) {
             StringWriter sw = new StringWriter();
             PrintWriter pw = new PrintWriter(sw);
