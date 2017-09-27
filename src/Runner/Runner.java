@@ -7,6 +7,7 @@ package Runner;
 
 import Home.HomeController;
 import Home.LocationController;
+import Login.*;
 import Util.*;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -85,6 +86,7 @@ public class Runner extends Application {
     }
 
     public void gotoHome() throws Exception {
+        Connection con = DBUtil.getConnectionSQLite();
         String district = hmap.get(location);
         if (location == null) {
             LocationController loc = (LocationController) replaceSceneContent(Constants.LOCATION);
@@ -94,7 +96,6 @@ public class Runner extends Application {
                 new Thread(new Runnable() {
                     public void run() {
                         try {
-                            Connection con = DBUtil.getConnectionSQLite();
                             Statement stmt = con.createStatement();
                             ResultSet rs = null;
                             rs = stmt.executeQuery("SELECT count(*) FROM tbl_st_target");
@@ -131,7 +132,13 @@ public class Runner extends Application {
         }
     }
 
-    private Node replaceSceneContent(String fxml) throws Exception {
+    public void gotoLogin(Stage stage) throws Exception {
+        this.stage = stage;
+        LoginController login = (LoginController) replaceSceneContent(Constants.LOGIN);
+        login.setApp(this, stage);
+    }
+
+    public Node replaceSceneContent(String fxml) throws Exception {
         FXMLLoader loader = new FXMLLoader();
         InputStream in = Runner.class.getResourceAsStream(fxml);
         loader.setBuilderFactory(new JavaFXBuilderFactory());
