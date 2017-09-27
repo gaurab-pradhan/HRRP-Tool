@@ -26,7 +26,7 @@ public class DashboardController extends BorderPane implements Initializable {
 
     private static Logger log = Logger.getLogger(DashboardController.class.getName());
     @FXML
-    Label dis, rowLbl, planLbl, reachLbl, poLbl, roundLbl;
+    Label dis, rowLbl, planLbl, reachLbl, poLbl, roundLbl, lbl;
 
     @FXML
     private Button refreshBtn;
@@ -53,6 +53,9 @@ public class DashboardController extends BorderPane implements Initializable {
             if (district.toLowerCase().equals("kathmandu valley")) {
                 countQ = "SELECT COUNT(*) FROM tbl_hrrp_4w WHERE district = 'Kathmandu' or district = 'Lalitpur' or district = 'Bhaktapur'";
             }
+            if (district.toLowerCase().equals("national")) {
+                countQ = "SELECT COUNT(*) FROM tbl_hrrp_4w";
+            }
             rs = stmt.executeQuery(countQ);
 
             int count = 0;
@@ -65,6 +68,9 @@ public class DashboardController extends BorderPane implements Initializable {
             if (district.toLowerCase().equals("kathmandu valley")) {
                 poQ = "SELECT COUNT(DISTINCT(po)) FROM tbl_hrrp_4w WHERE act_code != 'OT OT 001' and ( district = 'Kathmandu' or district = 'Lalitpur' or district = 'Bhaktapur')";
             }
+            if (district.toLowerCase().equals("national")) {
+                poQ = "SELECT COUNT(DISTINCT(po)) FROM tbl_hrrp_4w";
+            }
             rs = stmt.executeQuery(poQ);
 
             int poCount = 0;
@@ -76,6 +82,9 @@ public class DashboardController extends BorderPane implements Initializable {
             String sumQ = "SELECT SUM(total_planned) as plan, SUM(total_reached) as reach FROM tbl_hrrp_4w WHERE district = '" + district + "'";
             if (district.toLowerCase().equals("kathmandu valley")) {
                 sumQ = "SELECT SUM(total_planned) as plan, SUM(total_reached) as reach FROM tbl_hrrp_4w WHERE district = 'Kathmandu' or district = 'Lalitpur' or district = 'Bhaktapur'";
+            }
+            if (district.toLowerCase().equals("national")) {
+                sumQ = "SELECT SUM(total_planned) as plan, SUM(total_reached) as reach FROM tbl_hrrp_4w";
             }
             rs = stmt.executeQuery(sumQ);
             float plan = 0;
@@ -132,16 +141,19 @@ public class DashboardController extends BorderPane implements Initializable {
             if (district.toLowerCase().equals("kathmandu valley")) {
                 select = "Select * from " + tableName + " where district = 'Kathmandu' or district = 'Lalitpur' or district = 'Bhaktapur'";
             }
+            if (district.toLowerCase().equals("national")) {
+                select = "Select * from " + tableName;
+            }
             rs = stmt.executeQuery(select);
-            int i =1;
+            int i = 1;
             while (rs.next()) {
                 ps.setInt(1, i);
                 ps.setString(2, rs.getString(2));
                 ps.setString(3, rs.getString(3));
                 ps.setString(4, rs.getString(4));
-                ps.setString(5, rs.getString(5));
-                ps.setString(6, rs.getString(6));
-                ps.setString(7, rs.getString(7));
+                ps.setString(5, rs.getString(5).toUpperCase());
+                ps.setString(6, rs.getString(6).toUpperCase());
+                ps.setString(7, rs.getString(7).toUpperCase());
                 ps.setString(8, rs.getString(8));
                 ps.setString(9, rs.getString(9));
                 ps.setString(10, rs.getString(10));
