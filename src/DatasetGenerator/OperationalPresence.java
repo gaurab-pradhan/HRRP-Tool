@@ -36,7 +36,7 @@ public class OperationalPresence {
             if (path != null) {
                 PropertiesUtil.loadPropertiesFile();
                 Connection con = DBUtil.getConnectionSQLite();
-                String query = "SELECT district ,HRRP_VDC_CODE,vdc, COUNT(distinct(po)) count_po FROM " + tableName + " where act_type != 'Other' GROUP by district,HRRP_VDC_CODE,vdc ORDER BY district ASC";
+                String query = "SELECT district ,HRRP_VDC_CODE,vdc, COUNT(distinct(po)) count_po FROM " + tableName + " where act_type != 'Other' COLLATE NOCASE GROUP by HRRP_VDC_CODE ORDER BY district ASC";
                 String fname = "_OperationalPresence.csv";
                 String header = "District,HRRP_VDC_CODE,VDC, PO_COUNT";
                 System.out.println(query);
