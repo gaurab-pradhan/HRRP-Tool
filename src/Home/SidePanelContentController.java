@@ -33,15 +33,20 @@ public class SidePanelContentController implements Initializable {
                 HomeController.rootP.setCenter(box);
                 break;
             case "4W CHECK":
-                box = FXMLLoader.load(getClass().getResource(Constants.CLEAN));
-                HomeController.rootP.setCenter(box);
+                if (HomeController.dis.toLowerCase().equals("national")) {
+                    box = FXMLLoader.load(getClass().getResource(Constants.CLEAN_NAT));
+                    HomeController.rootP.setCenter(box);
+                } else {
+                    box = FXMLLoader.load(getClass().getResource(Constants.CLEAN));
+                    HomeController.rootP.setCenter(box);
+                }
                 break;
 
             case "INSERT CLEAN 4W":
                 box = FXMLLoader.load(getClass().getResource(Constants.INSERT));
                 HomeController.rootP.setCenter(box);
                 break;
-                
+
             case "DATASET GENERATOR":
                 box = FXMLLoader.load(getClass().getResource(Constants.GENERATOR));
                 HomeController.rootP.setCenter(box);

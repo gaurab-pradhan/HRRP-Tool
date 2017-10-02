@@ -15,6 +15,7 @@ import org.apache.commons.lang.StringUtils;
 
 import au.com.bytecode.opencsv.CSVReader;
 import java.sql.Statement;
+import javafx.scene.control.TextArea;
 
 /**
  *
@@ -46,7 +47,7 @@ public class CSVLoader {
      * records.
      * @throws Exception
      */
-    public void loadCSV(String csvFile, String tableName, boolean truncateBeforeLoad) throws Exception {
+    public void loadCSV(String csvFile, String tableName, boolean truncateBeforeLoad, TextArea logText) throws Exception {
 
         CSVReader csvReader = null;
         if (null == this.connection) {
@@ -78,11 +79,20 @@ public class CSVLoader {
 //        query = query
 //                .replaceFirst(KEYS_REGEX, StringUtils.join(headerRow, ","));
 //        query = query.replaceFirst(VALUES_REGEX, questionmarks);
+        int indexSize = 26;
         String query = "INSERT INTO " + tableName + " (`sn`, `district`, `vdc`, `ward`, `po`, `impl_partner`, `FundingOrg`, "
                 + "`act_type`, `act_sub_type`, `act_name`, `act_detail`, `units`, "
                 + "`fund_status`, `act_status`, `total_planned`, `total_reached`, "
                 + "`start_date`, `end_date`, `contact_name`, `contact_number`, `email`, "
                 + "`comments`, `HRRP_VDC_Code`, `HRRP_Ward_Code`, `act_code`,`round`) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        if (tableName.toLowerCase().equals("temp_hrrp_4w")) {
+            query = "INSERT INTO " + tableName + " (`sn`, `district`, `vdc`, `ward`, `po`, `impl_partner`, `FundingOrg`, "
+                + "`act_type`, `act_sub_type`, `act_name`, `act_detail`, `units`, "
+                + "`fund_status`, `act_status`, `total_planned`, `total_reached`, "
+                + "`start_date`, `end_date`, `contact_name`, `contact_number`, `email`, "
+                + "`comments`, `HRRP_VDC_Code`, `HRRP_Ward_Code`, `act_code`) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            indexSize = 25;
+        }
         System.out.println("Query: " + query);
 
         String[] nextLine;
@@ -105,12 +115,15 @@ public class CSVLoader {
 
                 if (null != nextLine) {
                     int index = 1;
+
                     for (String string : nextLine) {
+                        if (indexSize >= index) {
 //                        date = DateUtil.convertToDate(string);
-                        if (null != date) {
-                            ps.setDate(index++, new java.sql.Date(date.getTime()));
-                        } else {
-                            ps.setString(index++, string);
+                            if (null != date) {
+                                ps.setDate(index++, new java.sql.Date(date.getTime()));
+                            } else {
+                                ps.setString(index++, string);
+                            }
                         }
                     }
                     ps.addBatch();
@@ -122,11 +135,12 @@ public class CSVLoader {
             ps.executeBatch(); // insert remaining records
             con.commit();
         } catch (Exception e) {
+            logText.appendText("ERROR: Data might in correct format or some column is missing!!!!\n");
             con.rollback();
             e.printStackTrace();
             if (e.toString().contains("temp_hrrp_4w")) {
                 DBUtil.createTemptbl();
-                loadCSV(csvFile, tableName, truncateBeforeLoad);
+                loadCSV(csvFile, tableName, truncateBeforeLoad, logText);
             }
             throw new Exception(
                     "Error occured while loading data from file to database."

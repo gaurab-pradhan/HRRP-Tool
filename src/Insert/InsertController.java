@@ -12,10 +12,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ResourceBundle;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
@@ -34,6 +40,15 @@ public class InsertController implements Initializable {
     @FXML
     private TextArea log_txt;
 
+    @FXML
+    private ComboBox<String> combo;
+
+    @FXML
+    private Label lbl1, lbl2;
+
+    @FXML
+    private TextField roundTxt;
+
     Stage stage;
     String path = null;
     String tablename = "tbl_hrrp_4w";
@@ -42,7 +57,6 @@ public class InsertController implements Initializable {
     void browseFileAction(ActionEvent event) {
         log_txt.setText("");
         insertBtn.setDisable(true);
-        System.out.println("i am browse file");
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choose a File");
         fileChooser.getExtensionFilters().addAll(
@@ -57,10 +71,16 @@ public class InsertController implements Initializable {
     }
 
     @FXML
-    void insertAction(ActionEvent event) throws SQLException {
+    void insertAction(ActionEvent event) {
         try {
-            CSVLoader loader = new CSVLoader(DBUtil.getConnectionMySQL());
-            loader.loadCSV(path, tablename, true);
+            log_txt.appendText("INFO: Preparing data to insert into database.\n");
+            if (combo.getSelectionModel().getSelectedItem().toLowerCase().equals("nas")) {
+                CSVLoader loader = new CSVLoader(DBUtil.getConnectionMySQL());
+                loader.loadCSV(path, tablename, true, log_txt);
+            } else {
+                CSVLoader loader = new CSVLoader(DBUtil.getConnectionMySQL());
+                loader.loadCSV(path, tablename, true, log_txt);
+            }
         } catch (Exception ex) {
             StringWriter sw = new StringWriter();
             PrintWriter pw = new PrintWriter(sw);
@@ -68,14 +88,37 @@ public class InsertController implements Initializable {
             String exceptionText = sw.toString();
             log.error(exceptionText);
         }
-        log_txt.appendText("INFO: Preparing data to insert into database.");
         displayResult();
     }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         stage = Home.HomeController.stage;
+        browseFile.setDisable(true);
         insertBtn.setDisable(true);
+        lbl1.setVisible(false);
+        lbl2.setVisible(false);
+        roundTxt.setVisible(false);
+        fillCombo();
+
+    }
+
+    @FXML
+    void comboAction(ActionEvent event) throws Exception {
+        String location = "";
+        if (!combo.getSelectionModel().isEmpty()) {
+            browseFile.setDisable(false);
+            location = combo.getSelectionModel().getSelectedItem();
+            if (location.toLowerCase().equals("nas")) {
+                lbl1.setVisible(true);
+                lbl2.setVisible(true);
+                roundTxt.setVisible(true);
+            } else {
+                lbl1.setVisible(false);
+                lbl2.setVisible(false);
+                roundTxt.setVisible(false);
+            }
+        }
     }
 
     private void displayResult() {
@@ -93,19 +136,23 @@ public class InsertController implements Initializable {
             if (rs.next()) {
                 count = rs.getInt(1);
             }
-            log_txt.appendText("INFO: Total Rows Count: " + count + "\n");
+            if (count > 0) {
+                log_txt.appendText("INFO: Total Rows Count: " + count + "\n");
 
-            String sumQ = "SELECT SUM(total_planned) as plan, SUM(total_reached) as reach FROM " + tablename;
-            rs = stmt.executeQuery(sumQ);
-            float plan = 0;
-            float reach = 0;
-            if (rs.next()) {
-                plan = rs.getFloat(1);
-                reach = rs.getFloat(2);
+                String sumQ = "SELECT SUM(total_planned) as plan, SUM(total_reached) as reach FROM " + tablename;
+                rs = stmt.executeQuery(sumQ);
+                float plan = 0;
+                float reach = 0;
+                if (rs.next()) {
+                    plan = rs.getFloat(1);
+                    reach = rs.getFloat(2);
+                }
+                log_txt.appendText("INFO: Sum of Planned: " + plan + "\n");
+                log_txt.appendText("INFO: Sum of Reached: " + reach + "\n");
+                log_txt.appendText("INFO: Operation completed successfully\n");
+            } else {
+                log_txt.appendText("ERROR: Check your data and try again\n");
             }
-            log_txt.appendText("INFO: Sum of Planned: " + plan + "\n");
-            log_txt.appendText("INFO: Sum of Reached: " + reach + "\n");
-            log_txt.appendText("INFO: Operation completed successfully\n");
             rs.close();
             stmt.close();;
             con.close();
@@ -118,4 +165,23 @@ public class InsertController implements Initializable {
         }
     }
 
+    private void fillCombo() {
+        String[] orgType = {"Live Server", "NAS"};
+        ObservableList obList = FXCollections.observableArrayList();
+        for (int i = 0; i < orgType.length; i++) {
+            obList.add(orgType[i]);
+        }
+        combo.setItems(obList);
+    }
+
+    @FXML
+    void txtKeyTyped(KeyEvent evt) {
+        if (evt.getEventType() == KeyEvent.KEY_TYPED) {
+            String value = evt.getCharacter();
+            char vChar = value.charAt(0);
+            if (!(Character.isDigit(vChar)) || (vChar == '\b') || (vChar == ' ')) {
+                evt.consume();
+            }
+        }
+    }
 }

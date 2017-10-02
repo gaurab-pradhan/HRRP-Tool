@@ -9,6 +9,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ResourceBundle;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.*;
 import javafx.fxml.Initializable;
@@ -39,8 +41,11 @@ public class CleanerController extends BorderPane implements Initializable {
     @FXML
     private Button browseFile, checkBtn;
 
+    @FXML
+    ComboBox<String> disCombo;
     String path = null;
     String tablename = "temp_hrrp_4w";
+    String cleanDis;
 
     @FXML
     private void browseFileAction(ActionEvent event) {
@@ -81,12 +86,17 @@ public class CleanerController extends BorderPane implements Initializable {
         stage = Home.HomeController.stage;
         checkBtn.setDisable(true);
         rowCount.setDisable(true);
+        if (HomeController.dis.toLowerCase().equals("national")) {
+            fillCombo();
+        } else {
+            cleanDis = HomeController.dis;
+        }
     }
 
     private void readCSV() throws SQLException {
         try {
             CSVLoader loader = new CSVLoader(DBUtil.getConnectionSQLite());
-            loader.loadCSV(path, tablename, true);
+            loader.loadCSV(path, tablename, true, log_txt);
         } catch (Exception ex) {
             StringWriter sw = new StringWriter();
             PrintWriter pw = new PrintWriter(sw);
@@ -117,7 +127,12 @@ public class CleanerController extends BorderPane implements Initializable {
             Connection con = DBUtil.getConnectionSQLite();
             if (con != null) {
                 stmt = con.createStatement();
-                rs = stmt.executeQuery("SELECT COUNT(*) as count FROM " + tablename);
+                String query = "SELECT COUNT(*) as count FROM " + tablename + " Where district = '" + cleanDis + "'";
+                if (cleanDis.toLowerCase().equals("kathmandu valley")) {
+                    query = "SELECT COUNT(*) as count FROM " + tablename + " Where district IN ( 'Bhaktapur','Lalitpur','Kathmandu')";
+                }
+                System.out.println(query);
+                rs = stmt.executeQuery(query);
                 int count = 0;
                 if (rs.next()) {
                     count = rs.getInt("count");
@@ -165,7 +180,11 @@ public class CleanerController extends BorderPane implements Initializable {
             con = DBUtil.getConnectionSQLite();
             stmt = con.createStatement();
 
-            String vdcCodeCheck = "SELECT sn as RowNumber FROM " + tablename + " WHERE HRRP_VDC_Code = '#N/A' or  HRRP_VDC_Code = ''";
+            String vdcCodeCheck = "SELECT sn as RowNumber FROM " + tablename + " WHERE district = '" + cleanDis + "' and (HRRP_VDC_Code = '#N/A' or  HRRP_VDC_Code = '')";
+            if (cleanDis.toLowerCase().equals("kathmandu valley")) {
+                vdcCodeCheck = "SELECT sn as RowNumber FROM " + tablename + " WHERE district IN ( 'Bhaktapur','Lalitpur','Kathmandu') and (HRRP_VDC_Code = '#N/A' or  HRRP_VDC_Code = '')";
+            }
+            System.out.println(vdcCodeCheck);
             rs = stmt.executeQuery(vdcCodeCheck);
             int i = 0;
             String sn = "";
@@ -187,7 +206,11 @@ public class CleanerController extends BorderPane implements Initializable {
             }
             i = 0;
             sn = "";
-            String actCodeCheck = "SELECT sn as RowNumber FROM " + tablename + " WHERE act_code = '#N/A' or act_code = ''";
+            String actCodeCheck = "SELECT sn as RowNumber FROM " + tablename + " WHERE district = '" + cleanDis + "' and (act_code = '#N/A' or act_code = '')";
+            if (cleanDis.toLowerCase().equals("kathmandu valley")) {
+                actCodeCheck = "SELECT sn as RowNumber FROM " + tablename + " WHERE district IN ( 'Bhaktapur','Lalitpur','Kathmandu') and  (act_code = '#N/A' or act_code = '')";
+            }
+            System.out.println(actCodeCheck);
             rs = stmt.executeQuery(actCodeCheck);
             while (rs.next()) {
                 actError = true; // has some error
@@ -207,7 +230,11 @@ public class CleanerController extends BorderPane implements Initializable {
             }
             i = 0;
             sn = "";
-            String completedCheck = "SELECT sn FROM " + tablename + " where act_status LIKE '%completed%' and (total_planned <= 0 or total_reached <= 0)";
+            String completedCheck = "SELECT sn FROM " + tablename + " where district = '" + cleanDis + "' and act_status LIKE '%completed%' and (total_planned <= 0 or total_reached <= 0)";
+            if (cleanDis.toLowerCase().equals("kathmandu valley")) {
+                completedCheck = "SELECT sn FROM " + tablename + " where district IN ( 'Bhaktapur','Lalitpur','Kathmandu') and act_status LIKE '%completed%' and (total_planned <= 0 or total_reached <= 0)";
+            }
+            System.out.println(completedCheck);
             rs = stmt.executeQuery(completedCheck);
             while (rs.next()) {
                 comError = true; // has some error
@@ -225,18 +252,6 @@ public class CleanerController extends BorderPane implements Initializable {
                 }
                 log_txt.appendText("ERROR: Activity Status is completed but Total Planned or Total Reached figure is 0 in following rows: " + sn + "\n");
             }
-            i = 0;
-            sn = "";
-            String ongoingCheck = "SELECT sn FROM " + tablename + " where act_status LIKE '%ongoing%' and (total_planned <= 0 )";
-            rs = stmt.executeQuery(ongoingCheck);
-            while (rs.next()) {
-                ongoingError = true; // has some error
-                if (i == 0) {
-                    log_txt.appendText("ERROR: Total Planned figure is 0 for Ongoing activity\n");
-                }
-                i++;
-                sn = sn + String.valueOf(rs.getInt(1)) + ", ";
-            }
             if (ongoingError) {
                 sn = sn.trim();
                 if (sn.endsWith(",")) {
@@ -247,7 +262,11 @@ public class CleanerController extends BorderPane implements Initializable {
             }
             i = 0;
             sn = "";
-            String planCheck = "SELECT sn FROM " + tablename + " where act_status LIKE '%planned%' and (total_reached >0 )";
+            String planCheck = "SELECT sn FROM " + tablename + " where district = '" + cleanDis + "' and act_status LIKE '%planned%' and (total_reached >0 )";
+            if (cleanDis.toLowerCase().equals("kathmandu valley")) {
+                planCheck = "SELECT sn FROM " + tablename + " where district IN ( 'Bhaktapur','Lalitpur','Kathmandu') and act_status LIKE '%planned%' and (total_reached >0 )";
+            }
+            System.out.println(planCheck);
             rs = stmt.executeQuery(planCheck);
             while (rs.next()) {
                 planError = true; // has some error
@@ -284,10 +303,9 @@ public class CleanerController extends BorderPane implements Initializable {
     }
 
     private void dataCheck2() {
-        String district = HomeController.dis;
         try {
             Analysis ana = new Analysis();
-            ana.check(district, log_txt);
+            ana.check(cleanDis, log_txt);
             log_txt.appendText("INFO: 4w Check completed successfully \n");
         } catch (Exception ex) {
             StringWriter sw = new StringWriter();
@@ -296,5 +314,22 @@ public class CleanerController extends BorderPane implements Initializable {
             String exceptionText = sw.toString();
             log.error(exceptionText);
         }
+    }
+
+    @FXML
+    void disComboAction(ActionEvent event) {
+
+        if (!disCombo.getSelectionModel().isEmpty()) {
+            cleanDis = disCombo.getSelectionModel().getSelectedItem();
+        }
+    }
+
+    private void fillCombo() {
+        String[] orgType = {"Dhading", "Dolakha", "Gorkha", "Kathmandu Valley", "Kavrepalanchok", "Makwanpur", "Nuwakot", "Okhaldhunga", "Ramechhap", "Rasuwa", "Sindhuli", "Sindhupalchok"};
+        ObservableList obList = FXCollections.observableArrayList();
+        for (int i = 0; i < orgType.length; i++) {
+            obList.add(orgType[i]);
+        }
+        disCombo.setItems(obList);
     }
 }

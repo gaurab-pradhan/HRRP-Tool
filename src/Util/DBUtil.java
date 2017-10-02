@@ -210,8 +210,7 @@ public class DBUtil {
                     + "`comments` varchar(1000) DEFAULT NULL,\n"
                     + "`HRRP_VDC_Code` varchar(50) DEFAULT NULL,\n"
                     + "`HRRP_Ward_Code` varchar(50) DEFAULT NULL,\n"
-                    + "`act_code` varchar(50) DEFAULT NULL,\n"
-                    + "`round` varchar(50) DEFAULT NULL\n"
+                    + "`act_code` varchar(50) DEFAULT NULL\n"
                     + ");";
             stmt.executeUpdate(sql);
         } catch (SQLException ex) {
@@ -264,8 +263,7 @@ public class DBUtil {
                     + "`comments` varchar(1000) DEFAULT NULL,\n"
                     + "`HRRP_VDC_Code` varchar(50) DEFAULT NULL,\n"
                     + "`HRRP_Ward_Code` varchar(50) DEFAULT NULL,\n"
-                    + "`act_code` varchar(50) DEFAULT NULL,\n"
-                    + "`round` varchar(50) DEFAULT NULL\n"
+                    + "`act_code` varchar(50) DEFAULT NULL\n"
                     + ");";
             stmt = con.createStatement();
             stmt.executeUpdate(sql);

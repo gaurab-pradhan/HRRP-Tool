@@ -40,8 +40,14 @@ public class Analysis {
         stmt = con.createStatement();
 
         //Compare total number of Rows from previous and new round of 4w
-        String prev_count = "SELECT count(*) as count FROM tbl_hrrp_4w"; // where district = '" + district + "'";
-        String now_count = "SELECT count(*) as count FROM temp_hrrp_4w"; // where district = '" + district + "'";
+        String prev_count = "SELECT count(*) as count FROM tbl_hrrp_4w where district = '" + district + "'";
+        if (district.toLowerCase().equals("kathmandu valley")) {
+            prev_count = "SELECT count(*) as count FROM tbl_hrrp_4w where district IN ( 'Bhaktapur','Lalitpur','Kathmandu')";
+        }
+        String now_count = "SELECT count(*) as count FROM temp_hrrp_4w where district = '" + district + "'";
+        if (district.toLowerCase().equals("kathmandu valley")) {
+            now_count = "SELECT count(*) as count FROM temp_hrrp_4w where district IN ( 'Bhaktapur','Lalitpur','Kathmandu')";
+        }
         rs = stmt.executeQuery(prev_count);
         pre_count = rowCount();
 
@@ -49,8 +55,14 @@ public class Analysis {
         new_count = rowCount();
 
         //Compare total planned and reaced from previous and new round of 4w
-        String prev_sum = "SELECT sum(total_planned) as tp, sum(total_reached) as tr FROM tbl_hrrp_4w";// where district = '" + district + "'";
-        String now_sum = "SELECT sum(total_planned) as tp, sum(total_reached) as tr FROM temp_hrrp_4w";// where district = '" + district + "'";
+        String prev_sum = "SELECT sum(total_planned) as tp, sum(total_reached) as tr FROM tbl_hrrp_4w where district = '" + district + "'";
+        if (district.toLowerCase().equals("kathmandu valley")) {
+            prev_sum = "SELECT sum(total_planned) as tp, sum(total_reached) as tr FROM tbl_hrrp_4w where district IN ( 'Bhaktapur','Lalitpur','Kathmandu')";
+        }
+        String now_sum = "SELECT sum(total_planned) as tp, sum(total_reached) as tr FROM temp_hrrp_4w where district = '" + district + "'";
+        if (district.toLowerCase().equals("kathmandu valley")) {
+            now_sum = "SELECT sum(total_planned) as tp, sum(total_reached) as tr FROM temp_hrrp_4w where  district IN ( 'Bhaktapur','Lalitpur','Kathmandu')";
+        }
         rs = stmt.executeQuery(prev_sum);
         int[] pre_sum = sumTotalPlanReach();
         pre_planned = pre_sum[0];
@@ -64,7 +76,7 @@ public class Analysis {
         display(district);
         mkdir();
         String fname = district + "_Report.csv";
-        if(district.toLowerCase().equals("kathmandu valley")){
+        if (district.toLowerCase().equals("kathmandu valley")) {
             fname = "KtmValley_Report.csv";
         }
         BufferedWriter bw = null;
@@ -82,25 +94,53 @@ public class Analysis {
                     + "Group by po,act_type,act_sub_type,act_name "
                     + "UNION "
                     + "SELECT po,act_type,act_sub_type,act_name "
-                    + "FROM temp_hrrp_4w "
+                    + "FROM temp_hrrp_4w where district = '" + district + "'"
                     + "Group by po,act_type,act_sub_type,act_name ORDER BY po ASC";
+            if (district.toLowerCase().equals("kathmandu valley")) {
+                query1 = "SELECT po,act_type,act_sub_type,act_name "
+                        + "FROM tbl_hrrp_4w "
+                        + "Group by po,act_type,act_sub_type,act_name "
+                        + "UNION "
+                        + "SELECT po,act_type,act_sub_type,act_name "
+                        + "FROM temp_hrrp_4w where district IN ( 'Bhaktapur','Lalitpur','Kathmandu')"
+                        + "Group by po,act_type,act_sub_type,act_name ORDER BY po ASC";
+            }
             List<ActType_PO> mPairs = new ArrayList<ActType_PO>();
             rs = stmt.executeQuery(query1);
             mPairs = getListPo_ActType();
             for (int i = 0; i < mPairs.size(); i++) {
                 String prev_query = "SELECT sum(total_planned) as tp, sum(total_reached) as tr "
                         + "FROM tbl_hrrp_4w "
-                        + "Where po= '" + mPairs.get(i).getPo() + "' "
+                        + "Where district = '" + district + "'"
+                        + "and po= '" + mPairs.get(i).getPo() + "' "
                         + "and act_type = '" + mPairs.get(i).getAct_type() + "' "
                         + "and act_sub_type = '" + mPairs.get(i).getAct_sub_type() + "' "
                         + "and act_name ='" + mPairs.get(i).getAct_name() + "'";
+                if (district.toLowerCase().equals("kathmandu valley")) {
+                    prev_query = "SELECT sum(total_planned) as tp, sum(total_reached) as tr "
+                            + "FROM tbl_hrrp_4w "
+                            + "Where district IN ( 'Bhaktapur','Lalitpur','Kathmandu')"
+                            + "and po= '" + mPairs.get(i).getPo() + "' "
+                            + "and act_type = '" + mPairs.get(i).getAct_type() + "' "
+                            + "and act_sub_type = '" + mPairs.get(i).getAct_sub_type() + "' "
+                            + "and act_name ='" + mPairs.get(i).getAct_name() + "'";
+                }
                 String new_query = "SELECT sum(total_planned) as tp, sum(total_reached) as tr "
                         + "FROM temp_hrrp_4w "
-                        + "Where po= '" + mPairs.get(i).getPo() + "' "
+                        + "Where district = '" + district + "'"
+                        + "and po= '" + mPairs.get(i).getPo() + "' "
                         + "and act_type = '" + mPairs.get(i).getAct_type() + "'"
-                        + " and act_sub_type = '" + mPairs.get(i).getAct_sub_type() + "' "
+                        + "and act_sub_type = '" + mPairs.get(i).getAct_sub_type() + "' "
                         + "and act_name ='" + mPairs.get(i).getAct_name() + "'";
-
+                if (district.toLowerCase().equals("kathmandu valley")) {
+                    new_query = "SELECT sum(total_planned) as tp, sum(total_reached) as tr "
+                            + "FROM temp_hrrp_4w "
+                            + "Where district IN ( 'Bhaktapur','Lalitpur','Kathmandu')"
+                            + "and po= '" + mPairs.get(i).getPo() + "' "
+                            + "and act_type = '" + mPairs.get(i).getAct_type() + "'"
+                            + "and act_sub_type = '" + mPairs.get(i).getAct_sub_type() + "' "
+                            + "and act_name ='" + mPairs.get(i).getAct_name() + "'";
+                }
                 int prev_po_act_panned = 0;
                 int prev_po_act_reached = 0;
 
