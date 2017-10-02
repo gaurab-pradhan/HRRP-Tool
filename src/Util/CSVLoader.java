@@ -47,8 +47,7 @@ public class CSVLoader {
      * records.
      * @throws Exception
      */
-    public void loadCSV(String csvFile, String tableName, boolean truncateBeforeLoad, TextArea logText) throws Exception {
-
+    public void loadCSV(String csvFile, String tableName, boolean truncateBeforeLoad, TextArea logText, int indexSize) throws Exception {
         CSVReader csvReader = null;
         if (null == this.connection) {
             throw new Exception("Not a valid connection.");
@@ -79,19 +78,17 @@ public class CSVLoader {
 //        query = query
 //                .replaceFirst(KEYS_REGEX, StringUtils.join(headerRow, ","));
 //        query = query.replaceFirst(VALUES_REGEX, questionmarks);
-        int indexSize = 26;
         String query = "INSERT INTO " + tableName + " (`sn`, `district`, `vdc`, `ward`, `po`, `impl_partner`, `FundingOrg`, "
                 + "`act_type`, `act_sub_type`, `act_name`, `act_detail`, `units`, "
                 + "`fund_status`, `act_status`, `total_planned`, `total_reached`, "
                 + "`start_date`, `end_date`, `contact_name`, `contact_number`, `email`, "
                 + "`comments`, `HRRP_VDC_Code`, `HRRP_Ward_Code`, `act_code`,`round`) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-        if (tableName.toLowerCase().equals("temp_hrrp_4w")) {
+        if (indexSize == 25) {
             query = "INSERT INTO " + tableName + " (`sn`, `district`, `vdc`, `ward`, `po`, `impl_partner`, `FundingOrg`, "
-                + "`act_type`, `act_sub_type`, `act_name`, `act_detail`, `units`, "
-                + "`fund_status`, `act_status`, `total_planned`, `total_reached`, "
-                + "`start_date`, `end_date`, `contact_name`, `contact_number`, `email`, "
-                + "`comments`, `HRRP_VDC_Code`, `HRRP_Ward_Code`, `act_code`) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-            indexSize = 25;
+                    + "`act_type`, `act_sub_type`, `act_name`, `act_detail`, `units`, "
+                    + "`fund_status`, `act_status`, `total_planned`, `total_reached`, "
+                    + "`start_date`, `end_date`, `contact_name`, `contact_number`, `email`, "
+                    + "`comments`, `HRRP_VDC_Code`, `HRRP_Ward_Code`, `act_code`) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         }
         System.out.println("Query: " + query);
 
@@ -140,7 +137,7 @@ public class CSVLoader {
             e.printStackTrace();
             if (e.toString().contains("temp_hrrp_4w")) {
                 DBUtil.createTemptbl();
-                loadCSV(csvFile, tableName, truncateBeforeLoad, logText);
+                loadCSV(csvFile, tableName, truncateBeforeLoad, logText, indexSize);
             }
             throw new Exception(
                     "Error occured while loading data from file to database."

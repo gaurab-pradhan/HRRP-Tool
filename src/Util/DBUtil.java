@@ -29,6 +29,21 @@ public class DBUtil {
         return connection;
     }
 
+    public static Connection getConnectionNAS() {
+        Connection connection = null;
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            connection = DriverManager.getConnection(Constants.dbURLNAS + Constants.dbNameNAS, Constants.usernameNAS, Constants.passwordNAS);
+        } catch (ClassNotFoundException e) {
+            System.out.println("MySql database driver class not found." + e);
+            log.info("MySql database driver class not found." + e);
+        } catch (SQLException e) {
+            System.out.println("Unable to establish connection to MySql database." + e);
+            log.info("Unable to establish connection to MySql database." + e);
+        }
+        return connection;
+    }
+    
     public static Connection getConnectionSQLite() {
         Connection connection = null;
         try {

@@ -1,5 +1,6 @@
 package Insert;
 
+import Home.DashboardController;
 import Util.CSVLoader;
 import Util.DBUtil;
 import com.jfoenix.controls.*;
@@ -75,11 +76,11 @@ public class InsertController implements Initializable {
         try {
             log_txt.appendText("INFO: Preparing data to insert into database.\n");
             if (combo.getSelectionModel().getSelectedItem().toLowerCase().equals("nas")) {
-                CSVLoader loader = new CSVLoader(DBUtil.getConnectionMySQL());
-                loader.loadCSV(path, tablename, true, log_txt);
+                CSVLoader loader = new CSVLoader(DBUtil.getConnectionNAS());
+                loader.loadCSV(path, tablename, true, log_txt, 25);
             } else {
                 CSVLoader loader = new CSVLoader(DBUtil.getConnectionMySQL());
-                loader.loadCSV(path, tablename, true, log_txt);
+                loader.loadCSV(path, tablename, true, log_txt, 26);
             }
         } catch (Exception ex) {
             StringWriter sw = new StringWriter();
