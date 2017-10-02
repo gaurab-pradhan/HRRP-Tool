@@ -96,7 +96,7 @@ public class CleanerController extends BorderPane implements Initializable {
     private void readCSV() throws SQLException {
         try {
             CSVLoader loader = new CSVLoader(DBUtil.getConnectionSQLite());
-            loader.loadCSV(path, tablename, true, log_txt);
+            loader.loadCSV(path, tablename, true, log_txt,25);
         } catch (Exception ex) {
             StringWriter sw = new StringWriter();
             PrintWriter pw = new PrintWriter(sw);
