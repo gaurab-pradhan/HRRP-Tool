@@ -31,13 +31,11 @@ public class DashboardController extends BorderPane implements Initializable {
     @FXML
     private Button refreshBtn;
 
-    String district;
     String tableName = "tbl_hrrp_4w";
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        district = HomeController.dis;
-        dis.setText(district);
+        dis.setText(HomeController.dis);
         fillDashboard();
     }
 
@@ -49,11 +47,11 @@ public class DashboardController extends BorderPane implements Initializable {
             con = DBUtil.getConnectionSQLite();
             stmt = con.createStatement();
 
-            String countQ = "SELECT COUNT(*) FROM tbl_hrrp_4w WHERE district = '" + district + "'";
-            if (district.toLowerCase().equals("kathmandu valley")) {
+            String countQ = "SELECT COUNT(*) FROM tbl_hrrp_4w WHERE district = '" + HomeController.dis + "'";
+            if (HomeController.dis.toLowerCase().equals("kathmandu valley")) {
                 countQ = "SELECT COUNT(*) FROM tbl_hrrp_4w WHERE district = 'Kathmandu' or district = 'Lalitpur' or district = 'Bhaktapur'";
             }
-            if (district.toLowerCase().equals("national")) {
+            if (HomeController.dis.toLowerCase().equals("national")) {
                 countQ = "SELECT COUNT(*) FROM tbl_hrrp_4w";
             }
             rs = stmt.executeQuery(countQ);
@@ -64,11 +62,11 @@ public class DashboardController extends BorderPane implements Initializable {
             }
             rowLbl.setText(String.valueOf(count));
 
-            String poQ = "SELECT COUNT(DISTINCT(po)) FROM tbl_hrrp_4w WHERE act_code != 'OT OT 001' and district = '" + district + "'";
-            if (district.toLowerCase().equals("kathmandu valley")) {
+            String poQ = "SELECT COUNT(DISTINCT(po)) FROM tbl_hrrp_4w WHERE act_code != 'OT OT 001' and district = '" + HomeController.dis + "'";
+            if (HomeController.dis.toLowerCase().equals("kathmandu valley")) {
                 poQ = "SELECT COUNT(DISTINCT(po)) FROM tbl_hrrp_4w WHERE act_code != 'OT OT 001' and ( district = 'Kathmandu' or district = 'Lalitpur' or district = 'Bhaktapur')";
             }
-            if (district.toLowerCase().equals("national")) {
+            if (HomeController.dis.toLowerCase().equals("national")) {
                 poQ = "SELECT COUNT(DISTINCT(po)) FROM tbl_hrrp_4w";
             }
             rs = stmt.executeQuery(poQ);
@@ -79,11 +77,11 @@ public class DashboardController extends BorderPane implements Initializable {
             }
             poLbl.setText(String.valueOf(poCount));
 
-            String sumQ = "SELECT SUM(total_planned) as plan, SUM(total_reached) as reach FROM tbl_hrrp_4w WHERE district = '" + district + "'";
-            if (district.toLowerCase().equals("kathmandu valley")) {
+            String sumQ = "SELECT SUM(total_planned) as plan, SUM(total_reached) as reach FROM tbl_hrrp_4w WHERE district = '" + HomeController.dis + "'";
+            if (HomeController.dis.toLowerCase().equals("kathmandu valley")) {
                 sumQ = "SELECT SUM(total_planned) as plan, SUM(total_reached) as reach FROM tbl_hrrp_4w WHERE district = 'Kathmandu' or district = 'Lalitpur' or district = 'Bhaktapur'";
             }
-            if (district.toLowerCase().equals("national")) {
+            if (HomeController.dis.toLowerCase().equals("national")) {
                 sumQ = "SELECT SUM(total_planned) as plan, SUM(total_reached) as reach FROM tbl_hrrp_4w";
             }
             rs = stmt.executeQuery(sumQ);
@@ -115,6 +113,10 @@ public class DashboardController extends BorderPane implements Initializable {
 
     @FXML
     void refreshAction(ActionEvent event) throws SQLException {
+        refreshData();
+    }
+
+    public void refreshData() throws SQLException {
         Connection consqlite = DBUtil.getConnectionSQLite();
         Connection conmysql = DBUtil.getConnectionMySQL();
         Statement stmt = null;
@@ -137,11 +139,11 @@ public class DashboardController extends BorderPane implements Initializable {
 //            Date date = null;
 
             stmt = conmysql.createStatement();
-            String select = "Select * from " + tableName + " where district =  '" + district + "'"; // select data from MYSQL database
-            if (district.toLowerCase().equals("kathmandu valley")) {
+            String select = "Select * from " + tableName + " where district =  '" + HomeController.dis + "'"; // select data from MYSQL database
+            if (HomeController.dis.toLowerCase().equals("kathmandu valley")) {
                 select = "Select * from " + tableName + " where district = 'Kathmandu' or district = 'Lalitpur' or district = 'Bhaktapur'";
             }
-            if (district.toLowerCase().equals("national")) {
+            if (HomeController.dis.toLowerCase().equals("national")) {
                 select = "Select * from " + tableName;
             }
             rs = stmt.executeQuery(select);
@@ -196,4 +198,5 @@ public class DashboardController extends BorderPane implements Initializable {
         }
         fillDashboard();
     }
+
 }
