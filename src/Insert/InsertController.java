@@ -76,7 +76,10 @@ public class InsertController implements Initializable {
         try {
             log_txt.appendText("INFO: Preparing data to insert into database.\n");
             if (combo.getSelectionModel().getSelectedItem().toLowerCase().equals("nas")) {
-                CSVLoader loader = new CSVLoader(DBUtil.getConnectionNAS());
+                Connection con = DBUtil.getConnectionNAS();
+                String tableName = "tbl_hrrp_4w_"+roundTxt.getText().trim();
+                DBUtil.createHRRP_4wTbl_nas(con,tableName);
+                CSVLoader loader = new CSVLoader(con);
                 loader.loadCSV(path, tablename, true, log_txt, 25);
             } else {
                 CSVLoader loader = new CSVLoader(DBUtil.getConnectionMySQL());

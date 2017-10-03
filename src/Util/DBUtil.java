@@ -43,7 +43,7 @@ public class DBUtil {
         }
         return connection;
     }
-    
+
     public static Connection getConnectionSQLite() {
         Connection connection = null;
         try {
@@ -326,6 +326,89 @@ public class DBUtil {
             log.error(exceptionText);
         } finally {
             if (stmt != null) {
+                try {
+                    stmt.close();
+                } catch (SQLException ex) {
+                }
+            }
+        }
+    }
+
+    public static void createHRRP_4wTbl_nas(Connection con, String tbaleName) {
+        Statement stmt = null;
+        try {
+            String sql = "CREATE TABLE IF NOT EXISTS " + tbaleName + " (\n"
+                    + "`sn` int(10) DEFAULT NULL,\n"
+                    + "`district` varchar(50) DEFAULT NULL,\n"
+                    + "`vdc` varchar(50) DEFAULT NULL,\n"
+                    + "`ward` varchar(100) DEFAULT NULL,\n"
+                    + "`po` varchar(100) DEFAULT NULL,\n"
+                    + "`impl_partner` varchar(100) DEFAULT NULL,\n"
+                    + "`FundingOrg` varchar(100) DEFAULT NULL,\n"
+                    + "`act_type` varchar(100) DEFAULT NULL,\n"
+                    + "`act_sub_type` varchar(100) DEFAULT NULL,\n"
+                    + "`act_name` varchar(100) DEFAULT NULL,\n"
+                    + "`act_detail` varchar(1000) DEFAULT NULL,\n"
+                    + "`units` varchar(50) DEFAULT NULL,\n"
+                    + "`fund_status` varchar(3) DEFAULT NULL,\n"
+                    + "`act_status` varchar(15) DEFAULT NULL,\n"
+                    + "`total_planned` varchar(10) DEFAULT NULL,\n"
+                    + "`total_reached` varchar(10) DEFAULT NULL,\n"
+                    + "`start_date` varchar(10) DEFAULT NULL,\n"
+                    + "`end_date` varchar(10) DEFAULT NULL,\n"
+                    + "`contact_name` varchar(50) DEFAULT NULL,\n"
+                    + "`contact_number` varchar(50) DEFAULT NULL,\n"
+                    + "`email` varchar(100) DEFAULT NULL,\n"
+                    + "`comments` varchar(1000) DEFAULT NULL,\n"
+                    + "`HRRP_VDC_Code` varchar(50) DEFAULT NULL,\n"
+                    + "`HRRP_Ward_Code` varchar(50) DEFAULT NULL,\n"
+                    + "`act_code` varchar(50) DEFAULT NULL\n"
+                    + ");";
+            stmt = con.createStatement();
+            stmt.executeUpdate(sql);
+
+            sql = "CREATE TABLE IF NOT EXISTS temp_hrrp_4w (\n"
+                    + "`sn` int(10) DEFAULT NULL,\n"
+                    + "`district` varchar(50) DEFAULT NULL,\n"
+                    + "`vdc` varchar(50) DEFAULT NULL,\n"
+                    + "`ward` varchar(100) DEFAULT NULL,\n"
+                    + "`po` varchar(100) DEFAULT NULL,\n"
+                    + "`impl_partner` varchar(100) DEFAULT NULL,\n"
+                    + "`FundingOrg` varchar(100) DEFAULT NULL,\n"
+                    + "`act_type` varchar(100) DEFAULT NULL,\n"
+                    + "`act_sub_type` varchar(100) DEFAULT NULL,\n"
+                    + "`act_name` varchar(100) DEFAULT NULL,\n"
+                    + "`act_detail` varchar(1000) DEFAULT NULL,\n"
+                    + "`units` varchar(50) DEFAULT NULL,\n"
+                    + "`fund_status` varchar(3) DEFAULT NULL,\n"
+                    + "`act_status` varchar(15) DEFAULT NULL,\n"
+                    + "`total_planned` varchar(10) DEFAULT NULL,\n"
+                    + "`total_reached` varchar(10) DEFAULT NULL,\n"
+                    + "`start_date` varchar(10) DEFAULT NULL,\n"
+                    + "`end_date` varchar(10) DEFAULT NULL,\n"
+                    + "`contact_name` varchar(50) DEFAULT NULL,\n"
+                    + "`contact_number` varchar(50) DEFAULT NULL,\n"
+                    + "`email` varchar(100) DEFAULT NULL,\n"
+                    + "`comments` varchar(1000) DEFAULT NULL,\n"
+                    + "`HRRP_VDC_Code` varchar(50) DEFAULT NULL,\n"
+                    + "`HRRP_Ward_Code` varchar(50) DEFAULT NULL,\n"
+                    + "`act_code` varchar(50) DEFAULT NULL\n"
+                    + ");";
+            stmt.executeUpdate(sql);
+        } catch (SQLException ex) {
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            ex.printStackTrace(pw);
+            String exceptionText = sw.toString();
+            log.error(exceptionText);
+        } finally {
+            if (stmt != null) {
+                try {
+                    stmt.close();
+                } catch (SQLException ex) {
+                }
+            }
+            if (con != null) {
                 try {
                     stmt.close();
                 } catch (SQLException ex) {
