@@ -21,7 +21,7 @@ public class STVT_Target {
     String district;
 
     public void st_vt(String dis) throws SQLException {
-        log.info("Inserting Short Training and Vocational Training Data");
+       log.info("Inserting Short Training and Vocational Training Data");
         district = dis;
         Connection con = getConnectionSQLite();
         createTable(con, "tbl_st_target");

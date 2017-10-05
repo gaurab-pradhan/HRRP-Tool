@@ -18,6 +18,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -76,14 +77,22 @@ public class InsertController implements Initializable {
         try {
             log_txt.appendText("INFO: Preparing data to insert into database.\n");
             if (combo.getSelectionModel().getSelectedItem().toLowerCase().equals("nas")) {
-                Connection con = DBUtil.getConnectionNAS();
-                String tableName = "tbl_hrrp_4w_"+roundTxt.getText().trim();
-                DBUtil.createHRRP_4wTbl_nas(con,tableName);
-                CSVLoader loader = new CSVLoader(con);
-                loader.loadCSV(path, tablename, true, log_txt, 25);
+                if (!roundTxt.getText().trim().isEmpty()) {
+                    Connection con = DBUtil.getConnectionNAS();
+                    String tableName = "tbl_hrrp_4w_" + roundTxt.getText().trim();
+                    DBUtil.createHRRP_4wTbl_nas(con, tableName);
+                    CSVLoader loader = new CSVLoader(con);
+                    loader.loadCSV(path, tablename, true, log_txt, 25);
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error Dialog");
+                    alert.setContentText("4W Round missing");
+                    alert.showAndWait();
+                }
             } else {
-                CSVLoader loader = new CSVLoader(DBUtil.getConnectionMySQL());
-                loader.loadCSV(path, tablename, true, log_txt, 26);
+                Insert_4W_MySql.insertData(tablename, path);
+//                CSVLoader loader = new CSVLoader(DBUtil.getConnectionMySQL());
+//                loader.loadCSV(path, tablename, true, log_txt, 26);
             }
         } catch (Exception ex) {
             StringWriter sw = new StringWriter();
