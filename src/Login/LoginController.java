@@ -67,7 +67,7 @@ public class LoginController extends BorderPane {
             rs = stmt.executeQuery("SELECT * FROM user WHERE uname = '" + uname.getText() + "' and password = '" + pass.getText() + "'");
             if (rs.next()) {
                 stage.setResizable(true);
-                 this.run.gotoHome();
+                this.run.gotoHome();
                 rs.close();
                 stmt.close();
                 con.close();
