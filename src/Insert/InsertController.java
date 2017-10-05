@@ -91,8 +91,6 @@ public class InsertController implements Initializable {
                 }
             } else {
                 Insert_4W_MySql.insertData(tablename, path);
-//                CSVLoader loader = new CSVLoader(DBUtil.getConnectionMySQL());
-//                loader.loadCSV(path, tablename, true, log_txt, 26);
             }
         } catch (Exception ex) {
             StringWriter sw = new StringWriter();
