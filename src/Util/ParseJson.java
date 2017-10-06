@@ -7,6 +7,7 @@ package Util;
 
 import Bean.Contact;
 import java.io.*;
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.http.HttpEntity;
@@ -23,11 +24,13 @@ public class ParseJson {
 
     static InputStream is = null;
     private static Logger log = Logger.getLogger(ParseJson.class.getName());
+    
 
-    public static List<Contact> getUpdatedContact(String filterText) {
+    public static List<Contact> getUpdatedContact(String filterText, String api, String listid) throws Exception {
         List<Contact> list = null;
         String url = Constants.exportURL;
-
+        url = url.replaceAll("REPLACEAPI", api);
+        url = url.replaceAll("REPLCAELISTID", listid);
         try {
             // defaultHttpClient
             DefaultHttpClient httpClient = new DefaultHttpClient();
