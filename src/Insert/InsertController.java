@@ -1,7 +1,6 @@
 package Insert;
 
 import Home.DashboardController;
-import Util.CSVLoader;
 import Util.DBUtil;
 import com.jfoenix.controls.*;
 import java.io.File;
@@ -79,10 +78,12 @@ public class InsertController implements Initializable {
             if (combo.getSelectionModel().getSelectedItem().toLowerCase().equals("nas")) {
                 if (!roundTxt.getText().trim().isEmpty()) {
                     Connection con = DBUtil.getConnectionNAS();
-                    String tableName = "tbl_hrrp_4w_" + roundTxt.getText().trim();
+                    String tableName = "tbl_hrrp_4w_r" + roundTxt.getText().trim();
                     DBUtil.createHRRP_4wTbl_nas(con, tableName);
-                    CSVLoader loader = new CSVLoader(con);
-                    loader.loadCSV(path, tablename, true, log_txt, 25);
+//                    CSVLoader loader = new CSVLoader(con);
+//                    loader.loadCSV(path, tablename, true, log_txt, 25);
+                    Insert_4W_MySql.insertData(con, tableName, path);
+                    displayResult(con, tableName);
                 } else {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Error Dialog");
@@ -90,7 +91,9 @@ public class InsertController implements Initializable {
                     alert.showAndWait();
                 }
             } else {
-                Insert_4W_MySql.insertData(tablename, path);
+                Connection con = DBUtil.getConnectionMySQL();
+                Insert_4W_MySql.insertData(con, tablename, path);
+                displayResult(con, tablename);
             }
         } catch (Exception ex) {
             StringWriter sw = new StringWriter();
@@ -99,7 +102,7 @@ public class InsertController implements Initializable {
             String exceptionText = sw.toString();
             log.error(exceptionText);
         }
-        displayResult();
+
     }
 
     @Override
@@ -132,15 +135,13 @@ public class InsertController implements Initializable {
         }
     }
 
-    private void displayResult() {
+    private void displayResult(Connection con, String tbl) {
         ResultSet rs = null;
         Statement stmt = null;
-        Connection con = null;
         try {
-            con = DBUtil.getConnectionMySQL();
             stmt = con.createStatement();
 
-            String countQ = "SELECT COUNT(*) FROM " + tablename;
+            String countQ = "SELECT COUNT(*) FROM " + tbl;
             rs = stmt.executeQuery(countQ);
 
             int count = 0;
@@ -150,7 +151,7 @@ public class InsertController implements Initializable {
             if (count > 0) {
                 log_txt.appendText("INFO: Total Rows Count: " + count + "\n");
 
-                String sumQ = "SELECT SUM(total_planned) as plan, SUM(total_reached) as reach FROM " + tablename;
+                String sumQ = "SELECT SUM(total_planned) as plan, SUM(total_reached) as reach FROM " + tbl;
                 rs = stmt.executeQuery(sumQ);
                 float plan = 0;
                 float reach = 0;
@@ -160,6 +161,7 @@ public class InsertController implements Initializable {
                 }
                 log_txt.appendText("INFO: Sum of Planned: " + plan + "\n");
                 log_txt.appendText("INFO: Sum of Reached: " + reach + "\n");
+                log_txt.appendText("INFO: Data inserted into:" + tbl + "\n");
                 log_txt.appendText("INFO: Operation completed successfully\n");
             } else {
                 log_txt.appendText("ERROR: Check your data and try again\n");

@@ -11,10 +11,9 @@ import java.sql.*;
  */
 public class Insert_4W_MySql {
 
-    public static void insertData(String tablename, String path) throws SQLException {
+    public static void insertData(Connection con,String tablename, String path) throws SQLException {
         PropertiesUtil.loadPropertiesFile();
         Statement stmt = null;
-        Connection con = DBUtil.getConnectionMySQL();
         path = path.replaceAll("\\\\", "/");
         con.createStatement().execute("DELETE FROM " + tablename);
         stmt = null;
@@ -27,13 +26,9 @@ public class Insert_4W_MySql {
 
         stmt = con.createStatement();
         stmt.executeUpdate(esquel);
-
+        stmt.executeUpdate("DELETE from " + tablename + " WHERE sn = 0");
         String update = "UPDATE " + tablename + " SET act_code = REPLACE(REPLACE(act_code, '\\r', ''), '\\n', '')";
         stmt.executeUpdate(update);
         stmt.close();
-        con.close();
-//        } else {
-//            System.out.println("Table Exits Already");
-//        }
     }
 }
