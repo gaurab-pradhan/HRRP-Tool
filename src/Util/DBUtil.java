@@ -1,6 +1,7 @@
 package Util;
 
 import java.io.*;
+import java.security.GeneralSecurityException;
 import java.sql.*;
 import org.apache.log4j.*;
 
@@ -14,11 +15,15 @@ public class DBUtil {
     private static Logger log = Logger.getLogger(DBUtil.class.getName());
     static Connection con = null;
 
-    public static Connection getConnectionMySQL() {
+    public static Connection getConnectionMySQL() throws GeneralSecurityException, IOException {
+        String dbURL = "jdbc:mysql://" + Crypto.decrypt(PropertiesUtil.getLiveEnd()) + ":3306/";
+        String dbName = Crypto.decrypt(PropertiesUtil.getLiveDbname());
+        String username = Crypto.decrypt(PropertiesUtil.getLiveUser());
+        String password = Crypto.decrypt(PropertiesUtil.getLivePass());
         Connection connection = null;
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            connection = DriverManager.getConnection(Constants.dbURL + Constants.dbName, Constants.username, Constants.password);
+            connection = DriverManager.getConnection(dbURL + dbName, username, password);
         } catch (ClassNotFoundException e) {
             System.out.println("MySql database driver class not found." + e);
             log.info("MySql database driver class not found." + e);
@@ -29,11 +34,15 @@ public class DBUtil {
         return connection;
     }
 
-    public static Connection getConnectionNAS() {
+    public static Connection getConnectionNAS() throws GeneralSecurityException, IOException {
         Connection connection = null;
+        String dbURLNAS = "jdbc:mysql://" + Crypto.decrypt(PropertiesUtil.getNasEnd()) + ":3306/";
+        String dbNameNAS = Crypto.decrypt(PropertiesUtil.getNasDbname());
+        String usernameNAS = Crypto.decrypt(PropertiesUtil.getNasUser());
+        String passwordNAS = Crypto.decrypt(PropertiesUtil.getNasPass());
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            connection = DriverManager.getConnection(Constants.dbURLNAS + Constants.dbNameNAS, Constants.usernameNAS, Constants.passwordNAS);
+            connection = DriverManager.getConnection(dbURLNAS + dbNameNAS, usernameNAS, passwordNAS);
         } catch (ClassNotFoundException e) {
             System.out.println("MySql database driver class not found." + e);
             log.info("MySql database driver class not found." + e);
