@@ -12,6 +12,7 @@ import org.apache.log4j.PropertyConfigurator;
 public class PropertiesUtil {
 
     private static final String APPLICATION_PROPERTY_FILE = "conf/application.properties";
+    private static final String CONGIF_PROPERTY_FILE = "conf/config.properties";
     private static final String LOG4J_PROPERTIES = "conf/Log4j.properties";
     private static Logger log = Logger.getLogger(PropertiesUtil.class.getName());
 
@@ -21,6 +22,99 @@ public class PropertiesUtil {
     static String output;
     static String path;
 
+    static String apikey;
+    static String listId;
+
+    static String liveEnd;
+    static String liveDbname;
+    static String liveUser;
+    static String livePass;
+
+    static String nasEnd;
+    static String nasDbname;
+    static String nasUser;
+    static String nasPass;
+
+    public static String getApikey() {
+        return apikey;
+    }
+
+    public static void setApikey(String apikey) {
+        PropertiesUtil.apikey = apikey;
+    }
+
+    public static String getListId() {
+        return listId;
+    }
+
+    public static void setListId(String listId) {
+        PropertiesUtil.listId = listId;
+    }
+
+    public static String getLiveEnd() {
+        return liveEnd;
+    }
+
+    public static void setLiveEnd(String liveEnd) {
+        PropertiesUtil.liveEnd = liveEnd;
+    }
+
+    public static String getLiveDbname() {
+        return liveDbname;
+    }
+
+    public static void setLiveDbname(String liveDbname) {
+        PropertiesUtil.liveDbname = liveDbname;
+    }
+
+    public static String getLiveUser() {
+        return liveUser;
+    }
+
+    public static void setLiveUser(String liveUser) {
+        PropertiesUtil.liveUser = liveUser;
+    }
+
+    public static String getLivePass() {
+        return livePass;
+    }
+
+    public static void setLivePass(String livePass) {
+        PropertiesUtil.livePass = livePass;
+    }
+
+    public static String getNasEnd() {
+        return nasEnd;
+    }
+
+    public static void setNasEnd(String nasEnd) {
+        PropertiesUtil.nasEnd = nasEnd;
+    }
+
+    public static String getNasDbname() {
+        return nasDbname;
+    }
+
+    public static void setNasDbname(String nasDbname) {
+        PropertiesUtil.nasDbname = nasDbname;
+    }
+
+    public static String getNasUser() {
+        return nasUser;
+    }
+
+    public static void setNasUser(String nasUser) {
+        PropertiesUtil.nasUser = nasUser;
+    }
+
+    public static String getNasPass() {
+        return nasPass;
+    }
+
+    public static void setNasPass(String nasPass) {
+        PropertiesUtil.nasPass = nasPass;
+    }
+
     public static String getPath() {
         return path;
     }
@@ -29,7 +123,6 @@ public class PropertiesUtil {
         PropertiesUtil.path = path;
     }
 
-    
     public static String getOutput() {
         return output;
     }
@@ -71,6 +164,21 @@ public class PropertiesUtil {
             template_ta_ward = prop.getProperty("template_ta_ward");
             output = prop.getProperty("output");
             path = prop.getProperty("path");
+
+            prop.load(new FileInputStream(CONGIF_PROPERTY_FILE));
+            apikey = prop.getProperty("api");;
+            listId = prop.getProperty("listId");
+
+            liveEnd = prop.getProperty("live1");
+            liveDbname = prop.getProperty("live2");
+            liveUser = prop.getProperty("live3");
+            livePass = prop.getProperty("live4");
+
+            nasEnd = prop.getProperty("nas1");
+            nasDbname = prop.getProperty("nas2");
+            nasUser = prop.getProperty("nas3");
+            nasPass = prop.getProperty("nas4");
+
         } catch (IOException ex) {
             StringWriter sw = new StringWriter();
             PrintWriter pw = new PrintWriter(sw);
