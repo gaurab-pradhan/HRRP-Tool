@@ -19,11 +19,13 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.GeneralSecurityException;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
+import java.util.logging.Level;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -73,8 +75,8 @@ public class ContactController extends BorderPane {
     ProgressIndicator progressBar;
 
     private static Logger log = Logger.getLogger(ContactController.class.getName());
-    String listId = Constants.listId;
-    String api = Constants.apikey;
+    String listId = PropertiesUtil.getListId();
+    String api = PropertiesUtil.getApikey();
     String url = Constants.url;
     List<Contact> mainList;
     ObservableList<Contact> masterList;
@@ -95,7 +97,7 @@ public class ContactController extends BorderPane {
         resetForm();
     }
 
-    private void processData() throws NoSuchAlgorithmException, UnsupportedEncodingException {
+    private void processData() throws Exception {
         boolean flag = false;
         String emailTxt = email.getText().trim();
         String fnameTxt = fname.getText().trim();
@@ -277,19 +279,29 @@ public class ContactController extends BorderPane {
         }
     }
 
-    public void initialize() {
+    public void initialize() throws Exception {
         dis = HomeController.dis;
         fillCombo();
+        api = Crypto.decrypt(api);
+        listId = Crypto.decrypt(listId);
+        url = url.replaceAll("REPLCAELISTID", listId);
         new Thread(new Runnable() {
             public void run() {
-                masterList = FXCollections.observableArrayList();
-                mainList = new ArrayList<Contact>();
-                mainList = ParseJson.getUpdatedContact(dis);
+                try {
+                    masterList = FXCollections.observableArrayList();
+                    mainList = new ArrayList<Contact>();
+                    mainList = ParseJson.getUpdatedContact(dis, api, listId);
+                } catch (Exception ex) {
+                    StringWriter sw = new StringWriter();
+                    PrintWriter pw = new PrintWriter(sw);
+                    ex.printStackTrace(pw);
+                    String exceptionText = sw.toString();
+                    log.error(exceptionText);
+                }
                 log.info(mainList.size());
                 loadTable();
             }
         }).start();
-
     }
 
     @FXML
@@ -305,7 +317,7 @@ public class ContactController extends BorderPane {
                 try {
                     String hashEmail = HashIt.MD5(searchTxt.toLowerCase().trim());
 
-                    url = Constants.searchURL + hashEmail;
+                    url = (Constants.searchURL.replaceAll("REPLCAELISTID", listId)) + hashEmail;
                     String name = "anything";
                     String password = api;     //Mailchimp API key
                     String authString = name + ":" + password;
@@ -526,11 +538,11 @@ public class ContactController extends BorderPane {
     }
 
     @FXML
-    void reloadAction(ActionEvent event) {
+    void reloadAction(ActionEvent event) throws Exception {
         log.info("Reloaded");
         masterList = FXCollections.observableArrayList();
         mainList = new ArrayList<Contact>();
-        mainList = ParseJson.getUpdatedContact(dis);
+        mainList = ParseJson.getUpdatedContact(dis, api, listId);
         log.info("Total Contacts: " + mainList.size());
         loadTable();
     }
