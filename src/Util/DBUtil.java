@@ -3,6 +3,7 @@ package Util;
 import java.io.*;
 import java.security.GeneralSecurityException;
 import java.sql.*;
+import javafx.scene.control.Alert;
 import org.apache.log4j.*;
 
 /**
@@ -30,6 +31,10 @@ public class DBUtil {
         } catch (SQLException e) {
             System.out.println("Unable to establish connection to MySql database." + e);
             log.info("Unable to establish connection to MySql database." + e);
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Dialog");
+            alert.setContentText("Unable to establish connection to MySql database.com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure\n");
+            alert.showAndWait();
         }
         return connection;
     }

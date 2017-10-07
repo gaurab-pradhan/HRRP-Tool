@@ -8,7 +8,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane prefHeight="549.0" prefWidth="737.0" styleClass="theme" stylesheets="@../Style/Style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Home.SettingController">
+<BorderPane prefHeight="576.0" prefWidth="538.0" styleClass="theme" stylesheets="@../Style/Style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Home.SettingController">
    <top>
       <Pane prefHeight="71.0" prefWidth="737.0" BorderPane.alignment="CENTER">
          <children>
@@ -17,6 +17,7 @@
                   <Font name="System Bold" size="24.0" />
                </font>
             </Label>
+            <JFXToggleButton fx:id="editBtn" layoutX="384.0" layoutY="-6.0" onAction="#editAction" prefHeight="79.0" prefWidth="175.0" text="EDIT" />
          </children>
       </Pane>
    </top>
@@ -37,10 +38,10 @@
                               <Font size="18.0" />
                            </font>
                         </Label>
-                        <JFXTextField fx:id="liveEnd" layoutX="115.0" layoutY="54.0" prefHeight="29.0" prefWidth="395.0" />
-                        <JFXTextField fx:id="liveDbName" layoutX="115.0" layoutY="95.0" prefHeight="29.0" prefWidth="395.0" />
-                        <JFXTextField fx:id="liveUser" layoutX="115.0" layoutY="136.0" prefHeight="29.0" prefWidth="395.0" />
-                        <JFXTextField fx:id="livePass" layoutX="115.0" layoutY="177.0" prefHeight="29.0" prefWidth="395.0" />
+                        <JFXTextField fx:id="liveEndTxt" disable="true" layoutX="115.0" layoutY="54.0" prefHeight="29.0" prefWidth="395.0" />
+                        <JFXTextField fx:id="liveDbNameTxt" disable="true" layoutX="115.0" layoutY="95.0" prefHeight="29.0" prefWidth="395.0" />
+                        <JFXTextField fx:id="liveUserTxt" disable="true" layoutX="115.0" layoutY="136.0" prefHeight="29.0" prefWidth="395.0" />
+                        <JFXTextField fx:id="livePassTxt" disable="true" layoutX="115.0" layoutY="177.0" prefHeight="29.0" prefWidth="395.0" />
                         <Label layoutX="14.0" layoutY="139.0" text="Username">
                            <font>
                               <Font size="18.0" />
@@ -51,8 +52,7 @@
                               <Font size="18.0" />
                            </font>
                         </Label>
-                        <JFXToggleButton fx:id="liveEdit" layoutX="560.0" layoutY="14.0" prefHeight="58.0" prefWidth="175.0" text="EDIT" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="14.0" />
-                        <JFXButton fx:id="liveUpdate" disable="true" layoutX="215.0" layoutY="242.0" prefHeight="46.0" prefWidth="166.0" styleClass="Btn" text="UPDATE" />
+                        <JFXButton fx:id="liveUpdate" disable="true" layoutX="215.0" layoutY="242.0" onAction="#updateBtn" prefHeight="46.0" prefWidth="166.0" styleClass="Btn" text="UPDATE" />
                      </children>
                   </AnchorPane>
             </content>
@@ -61,7 +61,7 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <JFXTextField fx:id="nasEnd" layoutX="115.0" layoutY="54.0" prefHeight="29.0" prefWidth="395.0" />
+                        <JFXTextField fx:id="nasEndTxt" disable="true" layoutX="115.0" layoutY="54.0" prefHeight="29.0" prefWidth="395.0" />
                         <Label layoutX="14.0" layoutY="55.0" text="Endpoint">
                            <font>
                               <Font size="18.0" />
@@ -72,21 +72,20 @@
                               <Font size="18.0" />
                            </font>
                         </Label>
-                        <JFXTextField fx:id="nasDbName" layoutX="115.0" layoutY="95.0" prefHeight="29.0" prefWidth="395.0" />
+                        <JFXTextField fx:id="nasDbNameTxt" disable="true" layoutX="115.0" layoutY="95.0" prefHeight="29.0" prefWidth="395.0" />
                         <Label layoutX="14.0" layoutY="139.0" text="Username">
                            <font>
                               <Font size="18.0" />
                            </font>
                         </Label>
-                        <JFXTextField fx:id="nasUser" layoutX="115.0" layoutY="136.0" prefHeight="29.0" prefWidth="395.0" />
+                        <JFXTextField fx:id="nasUserTxt" disable="true" layoutX="115.0" layoutY="136.0" prefHeight="29.0" prefWidth="395.0" />
                         <Label layoutX="14.0" layoutY="182.0" text="Password">
                            <font>
                               <Font size="18.0" />
                            </font>
                         </Label>
-                        <JFXTextField fx:id="nasPass" layoutX="115.0" layoutY="177.0" prefHeight="29.0" prefWidth="395.0" />
-                        <JFXToggleButton fx:id="nasEdit" layoutX="560.0" layoutY="14.0" prefHeight="58.0" prefWidth="175.0" text="EDIT" />
-                        <JFXButton fx:id="nasUpdate" disable="true" layoutX="215.0" layoutY="242.0" prefHeight="46.0" prefWidth="166.0" styleClass="Btn" text="UPDATE" />
+                        <JFXTextField fx:id="nasPassTxt" disable="true" layoutX="115.0" layoutY="177.0" prefHeight="29.0" prefWidth="395.0" />
+                        <JFXButton fx:id="nasUpdate" disable="true" layoutX="215.0" layoutY="242.0" onAction="#updateBtn" prefHeight="46.0" prefWidth="166.0" styleClass="Btn" text="UPDATE" />
                      </children>
                   </AnchorPane>
             </content>
@@ -100,15 +99,14 @@
                               <Font size="18.0" />
                            </font>
                         </Label>
-                        <JFXTextField fx:id="apikey" layoutX="115.0" layoutY="54.0" prefHeight="29.0" prefWidth="395.0" />
+                        <JFXTextField fx:id="apikeyTxt" disable="true" layoutX="115.0" layoutY="54.0" prefHeight="29.0" prefWidth="395.0" />
                         <Label layoutX="14.0" layoutY="97.0" text="List ID">
                            <font>
                               <Font size="18.0" />
                            </font>
                         </Label>
-                        <JFXTextField fx:id="listid" layoutX="115.0" layoutY="97.0" prefHeight="29.0" prefWidth="395.0" />
-                        <JFXToggleButton fx:id="mailEdit" layoutX="560.0" layoutY="14.0" prefHeight="58.0" prefWidth="175.0" text="EDIT" />
-                        <JFXButton fx:id="mailUpdate" disable="true" layoutX="215.0" layoutY="158.0" prefHeight="46.0" prefWidth="166.0" styleClass="Btn" text="UPDATE" />
+                        <JFXTextField fx:id="listidTxt" disable="true" layoutX="115.0" layoutY="97.0" prefHeight="29.0" prefWidth="395.0" />
+                        <JFXButton fx:id="mailUpdate" disable="true" layoutX="215.0" layoutY="158.0" onAction="#updateBtn" prefHeight="46.0" prefWidth="166.0" styleClass="Btn" text="UPDATE" />
                      </children>
                   </AnchorPane>
                </content>
