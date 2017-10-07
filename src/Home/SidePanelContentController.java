@@ -51,6 +51,11 @@ public class SidePanelContentController implements Initializable {
                 box = FXMLLoader.load(getClass().getResource(Constants.GENERATOR));
                 HomeController.rootP.setCenter(box);
                 break;
+                
+            case "SETTING":
+                box = FXMLLoader.load(getClass().getResource(Constants.SETTING));
+                HomeController.rootP.setCenter(box);
+                break;
         }
     }
 

@@ -1,9 +1,11 @@
 package Home;
 
 import Util.DBUtil;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.URL;
+import java.security.GeneralSecurityException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -112,11 +114,11 @@ public class DashboardController extends BorderPane implements Initializable {
     }
 
     @FXML
-    void refreshAction(ActionEvent event) throws SQLException {
+    void refreshAction(ActionEvent event) throws SQLException, GeneralSecurityException, IOException {
         refreshData();
     }
 
-    public void refreshData() throws SQLException {
+    public void refreshData() throws SQLException, GeneralSecurityException, IOException {
         Connection consqlite = DBUtil.getConnectionSQLite();
         Connection conmysql = DBUtil.getConnectionMySQL();
         Statement stmt = null;

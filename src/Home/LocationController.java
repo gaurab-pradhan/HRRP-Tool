@@ -10,8 +10,10 @@ import Runner.Runner;
 import Util.Constants;
 import Util.DBUtil;
 import Util.STVT_Target;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.security.GeneralSecurityException;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import javafx.collections.FXCollections;
@@ -86,13 +88,13 @@ public class LocationController extends BorderPane {
                     STVT_Target stvt = new STVT_Target();
                     try {
                         stvt.st_vt(dis);
-                    } catch (SQLException ex) {
+                    } catch (Exception ex) {
                         StringWriter sw = new StringWriter();
                         PrintWriter pw = new PrintWriter(sw);
                         ex.printStackTrace(pw);
                         String exceptionText = sw.toString();
                         log.error(exceptionText);
-                    }
+                    } 
                 }
             });
             t1.start();
