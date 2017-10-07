@@ -6,8 +6,10 @@
 package Util;
 
 import static Util.DBUtil.*;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.security.GeneralSecurityException;
 import java.sql.*;
 import org.apache.log4j.Logger;
 
@@ -20,7 +22,7 @@ public class STVT_Target {
     private static Logger log = Logger.getLogger(STVT_Target.class.getName());
     String district;
 
-    public void st_vt(String dis) throws SQLException {
+    public void st_vt(String dis) throws SQLException, GeneralSecurityException, IOException {
        log.info("Inserting Short Training and Vocational Training Data");
         district = dis;
         Connection con = getConnectionSQLite();
@@ -57,7 +59,7 @@ public class STVT_Target {
         }
     }
 
-    void insertData(Connection con, String tableName) {
+    void insertData(Connection con, String tableName) throws GeneralSecurityException, IOException  {
         Statement stmt = null;
         ResultSet rs = null;
         PreparedStatement ps = null;
