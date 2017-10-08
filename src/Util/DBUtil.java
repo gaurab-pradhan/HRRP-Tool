@@ -74,10 +74,11 @@ public class DBUtil {
         return connection;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         con = getConnectionSQLite();
         createLocTbl();
         createHRRP_4wTbl();
+        con.close();
 //        createUsertbl();
     }
 

@@ -1,15 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Runner;
 
 import Home.HomeController;
 import Home.LocationController;
 import Login.*;
 import Util.*;
-import java.io.InputStream;
+import java.io.*;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.sql.*;
@@ -55,17 +50,15 @@ public class Runner extends Application {
         init();
         stage = primaryStage;
         stage.setTitle(title);
-//        stage.initStyle(StageStyle.TRANSPARENT);
         stage.getIcons().add(new Image(Constants.IMAGE));
         gotoHome(); // this is first scene
-
         primaryStage.show();
     }
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         hmap = new HashMap<String, String>();
         hmap.put("32ff00f215", "National");
         hmap.put("e6267bf447", "Dhading");
@@ -86,7 +79,6 @@ public class Runner extends Application {
     }
 
     public void gotoHome() throws Exception {
-        Connection con = DBUtil.getConnectionSQLite();
         String district = hmap.get(location);
         if (location == null) {
             LocationController loc = (LocationController) replaceSceneContent(Constants.LOCATION);
@@ -95,6 +87,7 @@ public class Runner extends Application {
             try {
                 new Thread(new Runnable() {
                     public void run() {
+                        Connection con = DBUtil.getConnectionSQLite();
                         try {
                             Statement stmt = con.createStatement();
                             ResultSet rs = null;
